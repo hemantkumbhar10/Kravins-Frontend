@@ -1,0 +1,98 @@
+.auth_container{
+    position: absolute;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color:var(--bg-gray);
+}
+
+.greet_div{
+    position: relative;
+    display: none !important;
+    width: 70%;
+    height: 100vh;
+    background-color: var(--orange);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero_titles{
+    margin:0 0 45px 0;
+}
+
+.hero_titles h1{
+    text-align: start;
+    font-size: 4rem;
+    color: var(--white);
+    font-weight: 500;
+}
+
+.hero_titles h3{
+    margin-top: 1.1vh;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--white);
+}
+
+
+.auth_div{
+    width: 50%;
+    height: 100vh;
+}
+
+.logo_div{
+    width: 100%;
+    height: 25vh;
+    border-radius: 0 0 10% 10%;
+    background-color: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo_bg{
+    width: 90px;
+    height: 90px;
+    background-color: var(--orange);
+    border-radius: 50%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo_bg img{
+    filter: brightness(11);
+    max-width: 90%;
+}
+
+
+
+@media screen and (max-width:799px) {
+    .auth_div{
+        width: 100%;
+    }
+}
+
+@media screen and (min-width:800px) {
+    .greet_div{
+        display: block !important;
+        width: 70vw;
+    }
+    .hero_titles{
+        width: 50%;
+        margin:auto;
+        margin-top: 100px;
+        margin-bottom: 50px;
+    }
+    .auth_div{
+        width: 40%;
+    }
+}

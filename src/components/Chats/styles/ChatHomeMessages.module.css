@@ -1,0 +1,8 @@
+.disable_scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+.disable_scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }

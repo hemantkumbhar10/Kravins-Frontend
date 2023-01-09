@@ -1,0 +1,30 @@
+
+.chat_dialog_box{
+    top:500px;
+    width:500px;
+    height:600px;
+}
+
+@media screen and (min-width:1100px){
+    .chat_container{
+        display: flex !important;
+        align-items: center !important;
+        flex-direction: column !important;
+        top:auto !important;
+        z-index: unset !important;
+    }    
+    .chat_title{
+        width:95% !important;
+        box-shadow: none !important;
+    }
+}
+
+
+.messagesBody::-webkit-scrollbar {
+    display: none;
+  }
+
+.messagesBody {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }

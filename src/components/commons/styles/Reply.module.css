@@ -1,0 +1,21 @@
+@media screen and (min-width:620px) {
+    .reply_container{
+        max-width: 500px !important;
+    }
+}
+
+@media screen and (min-width:960px) {
+    .reply_container{
+        max-width: 650px !important;
+    }
+}
+
+/* hide scrollbar for chrome */
+.reply_textfield::-webkit-scrollbar {
+    display: none !important;
+  }
+
+.reply_textfield {
+    -ms-overflow-style: none !important;  /* IE and Edge */
+    scrollbar-width: none !important;  /* Firefox */
+  }

@@ -1,0 +1,120 @@
+.messageRow {
+  display:flex;
+}
+
+.messageRowRight {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.messageBlue {
+  position: relative;
+  margin-left: 20px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #f0f4f9;
+  width: 60%;
+  /* height: 50px; */
+  text-align: left;
+  font: 400 .9em 'Open Sans', 'sans-serif';
+  border: 1px;
+  border-radius: 8px;
+}
+
+.messageBlue:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 15px #f0f4f9;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom-left-radius: 25px;
+  top: 0;
+  left: -15px;
+}
+
+.messageBlue:before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 20px solid #f0f4f9;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-bottom-left-radius: 25px;
+  top: -1px;
+  left: -17px;
+}
+
+.messageContent {
+  padding: 0;
+  margin: 0;
+}
+
+.messageTimeStampRight {
+  position: absolute;
+  font-size: .85em;
+  font-weight: 300;
+  margin-top: 10px;
+  bottom: -2.5px;
+  right: 5px;
+}
+
+.messageOrange {
+  position: relative;
+  margin-right: 20px;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color:#ddf6b6;
+  width: 60%;
+  /* height: 50px; */
+  text-align: left;
+  font: 400 .9em 'Open Sans', 'sans-serif';
+
+  border-radius: 8px;
+}
+
+.messageOrange:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 15px  #ddf6b6;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom-right-radius: 25px;
+  top: 0;
+  right: -15px;
+}
+
+.messageOrange:before {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-top: 20px solid #ddf6b6;
+  border-left: 16px solid transparent;
+  border-right: 16px solid transparent;
+  border-bottom-right-radius: 25px;
+  top: 0px;
+  right: -17px;
+}
+
+.orange {
+  /* color: #ddf6b6; */
+  background-color: var(--orange);
+  width: 4;
+  height: 4;
+}
+
+.avatarNothing {
+  color: transparent;
+  background-color: transparent;
+  width: 4;
+  height: 4;
+}
+
+.displayName {
+  margin-left: 20px;
+}

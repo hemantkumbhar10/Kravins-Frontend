@@ -1,0 +1,11 @@
+@media screen and (min-width:620px) {
+    .friendlist_container{
+        max-width: 900px !important;
+    }
+}
+
+@media screen and (min-width:960px) {
+    .friendlist_container{
+        max-width: 618px !important;
+    }
+}

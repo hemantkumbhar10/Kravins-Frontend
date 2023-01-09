@@ -1,0 +1,14 @@
+.cards{
+
+}
+
+
+
+.right_nav_container::-webkit-scrollbar {
+    display: none;
+  }
+
+.right_nav_container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }

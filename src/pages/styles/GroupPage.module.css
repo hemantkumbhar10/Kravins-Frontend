@@ -1,0 +1,22 @@
+@media screen and (min-width:855px){
+    .grouppage_container{
+       overflow: hidden ;
+    }
+    /* .grouppage_titlecard{
+        position:fixed;
+    } */
+    .grouppage_scroll_div{
+        height: 85vh;
+        overflow-y: scroll !important;
+    }
+}
+
+/* hide scrollbar for chrome */
+.grouppage_scroll_div::-webkit-scrollbar {
+    display: none;
+  }
+
+.grouppage_scroll_div {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }

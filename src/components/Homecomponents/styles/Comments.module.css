@@ -1,0 +1,28 @@
+
+@media screen and (min-width:620px) {
+    .comments_container{
+        max-width: 500px !important;
+    }
+    .recipe_img{
+        height: 300px;
+    }
+}
+
+@media screen and (min-width:960px) {
+    .comments_container{
+        max-width: 650px !important;
+    }
+    .recipe_img{
+        height: 400px;
+    }
+}
+
+/* hide scrollbar for chrome */
+.comments_page_container::-webkit-scrollbar {
+    display: none;
+  }
+
+.comments_page_container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }

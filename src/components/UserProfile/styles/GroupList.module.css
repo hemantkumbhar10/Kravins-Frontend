@@ -1,0 +1,11 @@
+@media screen and (min-width:620px) {
+    .grouplist_grid_container{
+        max-width: 900px !important;
+    }
+}
+
+@media screen and (min-width:960px) {
+    .grouplist_grid_container{
+        max-width: 618px !important;
+    }
+}

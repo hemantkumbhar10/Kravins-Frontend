@@ -1,0 +1,42 @@
+.box{
+    position: relative;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    margin: auto;
+    margin-top: 2vh;
+    background: none;
+}
+
+.textfields{
+    width: 90%;
+    height: 60px;
+}
+
+.select_div{
+    width: 90%;
+    margin-top: 10px;
+}
+
+.textfields label{
+    color:var(--input-labels) !important;
+    font-size: 0.9rem;
+}
+
+.input_label{
+    width: 100%;
+}
+
+.menu_items,
+.input_label{
+    font-size: 0.9rem !important;
+}
+
+.error{
+    font-size: 0.7rem !important;
+    color: red;
+    font-style: italic;
+}

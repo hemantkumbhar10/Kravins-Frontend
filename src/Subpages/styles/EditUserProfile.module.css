@@ -1,0 +1,28 @@
+
+.user_edit_form{
+    margin: auto;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+
+
+
+
+
+@media screen and (min-width:620px) {
+    .user_profile_container{
+        align-self: center !important;
+        justify-self: center !important;
+        max-width: 600px !important;
+    }
+}
+
+@media screen and (min-width:960px) {
+    .user_profile_container{
+        max-width: 950px !important;
+    }
+}

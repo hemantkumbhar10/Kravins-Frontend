@@ -1,0 +1,33 @@
+.box{
+    position: relative;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    margin: auto;
+    margin-top: 5vh;
+}
+
+.textfields{
+    width: 90%;
+    height: 70px;
+}
+
+.textfields label{
+    color:var(--input-labels);
+    font-size: 0.9rem;
+}
+
+.links{
+    position: relative;
+    top: 1vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.links span{
+    text-align: end;
+}

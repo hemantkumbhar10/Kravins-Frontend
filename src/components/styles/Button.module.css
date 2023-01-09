@@ -1,0 +1,26 @@
+.button{
+    position: absolute;
+    height: 50px;
+    width: 250px;
+    border: none;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: 'Port Lligat Sans', sans-serif;
+    color: var(--orange);
+}
+
+.button:hover,
+.button:active{
+    background-color: var(--link) !important;
+    height: 48px;
+    width: 245px;
+    font-size: 1.1rem;
+    transition: all 0.2s ease-out;
+    color: var(--white) !important;
+}
+
+.button:disabled{
+    background-color: var(--disabled) !important;
+    color: var(--white) !important;
+}

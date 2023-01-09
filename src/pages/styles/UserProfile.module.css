@@ -1,0 +1,21 @@
+.user_profile_homepage_container{
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.active_tab{
+  color: #fa6342 !important;
+  border-bottom: 1px solid #fa6342
+}
+
+
+
+/* hide scrollbar for chrome */
+.user_profile_posts_container,.posts_disable_scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+.user_profile_posts_container,.posts_disable_scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }

@@ -1,0 +1,72 @@
+:root {
+  --bg-gray: #e7e3e3;
+  --orange: #ff4b3a;
+  --disabled: #b15148;
+  --blue: #4bc8f1;
+  --black: #000000;
+  --link: #0ca4fa;
+  --bg-input: #e5e5e5;
+  --gray: #cfcfcf;
+  --white: #ffffff;
+  --input-labels: #6c6a6a;
+
+
+  /* heresenewthemestart */
+ /* tester */
+ /* tester ends */
+
+  --blue: #007bff;
+  --indigo: #6610f2;
+  --purple: #6f42c1;
+  --pink: #e83e8c;
+  --red: #dc3545;
+  --orange: #fd7e14;
+  --yellow: #ffc107;
+  --green: #28a745;
+  --teal: #20c997;
+  --cyan: #17a2b8;
+  --white: #fff;
+  --gray: #6c757d;
+  --gray-dark: #343a40;
+  --primary: #007bff;
+  --secondary: #6c757d;
+  --success: #28a745;
+  --info: #17a2b8;
+  --warning: #ffc107;
+  --danger: #dc3545;
+  --light: #f8f9fa;
+  --dark: #343a40;
+  --breakpoint-xs: 0;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.app {
+  /* background-color:var(--bg-gray); */
+  /* background-color:rgb(237, 243, 246) ; */
+  background-color: #edf2f6;
+  /* background-image: linear-gradient(-225deg, #FFE29F 0%, #FFA99F 48%, #fa685b 100%); */
+  
+  position: relative;
+
+  width: 100%;
+  height: 100vh;
+}
+ /* span {
+  color:#d17a72
+ } */

@@ -1,0 +1,126 @@
+.toyfaces{
+    position: relative;
+    width: 85vw;
+    height: 60vw;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: center;
+    /* background-color: aliceblue; */
+}
+
+
+.toyface_girl{
+    position: absolute;
+    object-fit:contain;
+    width: 60%;
+    transform: rotateZ(-3deg);
+    z-index: 1;
+    animation: toyface_girl 5s infinite ease;
+    bottom: 0;
+    left: 5%;
+}
+
+.toyface_man{
+    position:absolute;
+    object-fit: contain;
+    width: 40%;
+    margin-left: 40%;
+    bottom: 0;
+    transform: rotateZ(5deg);
+    animation: toyface_man 6s infinite ease;
+}
+
+
+.toyfaces_overlay{
+    position: absolute;
+    width: 100%;
+    height: 40%;
+    bottom: -10%;
+    z-index: 2;
+    background: rgb(255,75,58);
+background: linear-gradient(0deg, rgba(255,75,58,1) 0%, rgba(255,75,58,0.95) 49%, rgba(255,75,58,0.111659698058911) 100%);
+}
+  
+
+  @keyframes toyface_girl{
+    0%{
+        transform: rotateZ(0deg);
+    }
+    50%{
+        transform: rotateZ(-3deg);
+    }
+    100%{
+        transform: rotateZ(0deg);
+    }
+}
+
+@keyframes toyface_man{
+    0%{
+        transform: rotateZ(0deg);
+    }
+    50%{
+        transform: rotateZ(7deg);
+    }
+    100%{
+        transform: rotateZ(0deg);
+    }
+}
+
+@media screen and (min-width: 550px) and (max-width:960px) {
+    .toyfaces{
+        width: 45vw;
+    height: 30vw;
+    }
+
+    .toyface_girl{
+        object-fit:contain;
+        width: 60%;
+        transform: rotateZ(-3deg);
+        z-index: 1;
+        animation: toyface_girl 5s infinite ease;
+    }
+    
+    .toyface_man{
+        object-fit: contain;
+        width: 40%;
+        margin-left: 40%;
+        transform: rotateZ(5deg);
+        animation: toyface_man 6s infinite ease;
+    }
+
+    .toyfaces_overlay{
+        height: 40%;
+        bottom: -10%;
+    }
+}
+
+
+@media screen and (min-width: 961px) {
+
+    .toyfaces{
+        width: 30vw;
+    height: 20vw;
+    }
+
+    .toyface_girl{
+        object-fit:contain;
+        width: 60%;
+        transform: rotateZ(-3deg);
+        z-index: 1;
+        animation: toyface_girl 5s infinite ease;
+    }
+    
+    .toyface_man{
+        object-fit: contain;
+        width: 40%;
+        margin-left: 40%;
+        transform: rotateZ(5deg);
+        animation: toyface_man 6s infinite ease;
+    }
+
+    .toyfaces_overlay{
+        height: 40%;
+        bottom: -10%;
+    }
+}

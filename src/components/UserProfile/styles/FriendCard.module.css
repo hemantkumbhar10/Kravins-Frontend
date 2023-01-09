@@ -1,0 +1,21 @@
+@media screen and (min-width: 300px) {
+  .css-m69qwo-MuiStack-root {
+    flex-direction: column !important;
+  }
+}
+
+@media screen and (min-width: 620px) {
+  .friend_card_container {
+    max-width: 500px !important;
+  }
+}
+
+@media screen and (min-width: 960px) {
+  .friend_card_container {
+    max-width: 500px !important;
+  }
+  .avatar_image {
+    width: 80px !important;
+    height: 80px !important;
+  }
+}

@@ -1,0 +1,18 @@
+@media screen and (min-width:400px) {
+    .post_container{
+        max-width: 500px !important;
+    }
+    .post_img{
+        height: 300px;
+    }
+}
+
+@media screen and (min-width:960px) {
+    .post_container{
+        max-width: 600px !important;
+    }
+    .post_img{
+        max-width: 580px !important;
+        height: 400px;
+    }
+}

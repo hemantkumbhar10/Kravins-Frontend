@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useState} from "react";
 import Typography from "@mui/material/Typography";
 import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Box from "@mui/material/Box";
@@ -14,10 +14,8 @@ import Button from "@mui/material/Button";
 import userImage from "../assets/salat.png";
 
 import classes from "./styles/UserProfile.module.css";
-import UsersPosts from "../components/UserProfile/UsersPosts";
-import FriendList from "../components/UserProfile/FriendList";
-import GroupList from '../components/UserProfile/GroupList';
 import { NavLink, Outlet } from "react-router-dom";
+import EditUserProfile from "../Subpages/EditUserProfile";
 
 const MyNavLink = React.forwardRef<any, any>((props, ref) => (
   <NavLink
@@ -38,6 +36,21 @@ const ImageStyled = styled("img")({
 });
 
 const UserProfile = () => {
+
+  const [openEditProfileDialoug, setOpenEditProfileDialog] = useState<boolean>(false);
+
+
+
+  const editProfileDialogHandler=()=>{
+    setOpenEditProfileDialog(!openEditProfileDialoug);
+  }
+
+
+
+
+
+
+
   return (
     <Box sx={{maxHeight:'100%',  pt:{md:7,xs:0},m:'auto', mx:0,width:'100%',}} >
       <Paper
@@ -83,6 +96,7 @@ const UserProfile = () => {
                 color="success"
                 variant="contained"
                 sx={{ marginTop: 1 }}
+                onClick={editProfileDialogHandler}
               >
                 Edit Profile
               </Button>
@@ -230,6 +244,7 @@ const UserProfile = () => {
           <Box sx={{height:{xs:'450px',sm:'300px'}}}></Box>
         </Box>
       </Container>
+      <EditUserProfile close={editProfileDialogHandler} open={openEditProfileDialoug}/>
     </Box>
   );
 };

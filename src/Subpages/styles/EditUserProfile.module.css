@@ -17,12 +17,12 @@
     .user_profile_container{
         align-self: center !important;
         justify-self: center !important;
-        max-width: 600px !important;
+        max-width: 800px !important;
     }
 }
 
 @media screen and (min-width:960px) {
     .user_profile_container{
-        max-width: 950px !important;
+        max-width: 1050px !important;
     }
 }

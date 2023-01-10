@@ -29,6 +29,7 @@ import {viewportContext} from './contexts/ViewportProvider';
 import UserProfile from "./pages/UserProfile";
 import FriendList from "./components/UserProfile/FriendList";
 import UsersPosts from "./components/UserProfile/UsersPosts";
+import NoMatch from "./pages/NoMatch";
 // import UserProfile from './pages/UserProfile';
 // import GroupPage from './pages/GroupPage';
 // import CreateGroup from './Subpages/CreateGroup';
@@ -107,6 +108,7 @@ function App() {
                 }
               </Route>
               <Route path="auth" element={<Auth />} />
+              <Route path="*" element={<NoMatch/>} />
               
             </Routes>
             {/* <NavBar/> */}

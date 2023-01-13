@@ -1,9 +1,17 @@
 import { createContext } from "react";
-import { User } from "../hooks/useUser";
+// import { User } from "../hooks/useUser";
+
+interface UserType {
+  username?:string,
+  email:string,
+  password:string,
+  verificationquestion?:{question:string,answer:string},
+}
+
 
 interface AuthContextt {
-  user: User | null;
-  setUser: (user: User | null) => void;
+  user: UserType | null;
+  // setUser: (user: User | null) => void;
 }
 
 export const AuthContext = createContext<AuthContextt>({
@@ -14,7 +22,7 @@ export const AuthContext = createContext<AuthContextt>({
 
 
 
-  setUser: () => {},
+  // setUser: () => {},
 
 
 

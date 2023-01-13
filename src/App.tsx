@@ -5,7 +5,7 @@ import theme from "./theme";
 import { ViewportProvider } from "./contexts/ViewportProvider";
 
 import { AuthContext } from "./contexts/AuthContext";
-import { AuthProvider } from "./hooks/useAuth";
+import { AuthProvider } from "./hooks/useUser";
 
 import { Routes, Route, Outlet, Link } from "react-router-dom";
 

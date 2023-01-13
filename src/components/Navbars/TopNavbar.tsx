@@ -24,7 +24,8 @@ import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 
 
-import { useAuth } from "../../hooks/useAuth";
+// import { useAuth } from "../../hooks/useAuth"
+import useAuth from "../../hooks/useUser";
 
 
 
@@ -52,7 +53,7 @@ const MyNavLink = React.forwardRef<any, any>((props, ref) => (
 
 const TopNavBar = () => {
 
-  const {logout, authed} = useAuth();
+  const {user, authenticated} = useAuth();
 
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -78,6 +79,7 @@ const TopNavBar = () => {
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(event.currentTarget);
   };
@@ -89,6 +91,10 @@ const TopNavBar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const showUser = ()=>{
+    console.log(user);
+  }
 
   return (
     <AppBar position="fixed" sx={{ height: "50px", backgroundColor:'#34465d' }}>
@@ -122,14 +128,14 @@ const TopNavBar = () => {
                 sx={{ width: 30, height: 30 }}
               />
             </IconButton>
-            {authed ? menu : ''}
+            {authenticated ? menu : ''}
           </Box>
           {/* Bottomnav///////////////////////////////////////////////////////////////////////////////////////// */}
          {bottomnav}
           {/* Bottomnav///////////////////////////////////////////////////////////////////////////////////////// */}
 
           <Box sx={{ flexGrow: 0 }}>
-              {authed && <Tooltip title="Open settings">
+              {authenticated && <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     alt="Remy Sharp"
@@ -138,7 +144,7 @@ const TopNavBar = () => {
                   />
                 </IconButton>
               </Tooltip>}
-            {!authed && (
+            {!authenticated && (
               <Button
                 size="small"
                 color="success"
@@ -149,7 +155,7 @@ const TopNavBar = () => {
                 Login
               </Button>
             )}
-            {authed && 
+            {authenticated && 
             <Menu
               sx={{ mt: "45px", zIndex:888888 }}
               id="menu-appbar"
@@ -177,7 +183,7 @@ const TopNavBar = () => {
               </MenuItem>
               <MenuItem
                 key="Logout"
-                onClick={logout}
+                onClick={showUser}
                 component={Link}
                 to="/home"
               >

@@ -31,6 +31,14 @@ import { NavLink } from "react-router-dom";
 import CreateGroup from "../../Subpages/CreateGroup";
 import CreatePostPage from "../../pages/CreatePostPage";
 
+import { useAuth } from "../../hooks/useAuth";
+
+
+
+
+
+  
+
 
 
 const MyNavLink = React.forwardRef<any, any>((props, ref) => (
@@ -53,6 +61,8 @@ const MyNavLink = React.forwardRef<any, any>((props, ref) => (
 const DeskLeftNav = () =>{
   const [openPostDialogue, setOpenPostDialogue] = React.useState(false);
   const [openGroupDialogue, setOpenGroupDialogue] = React.useState(false);
+
+  const { authed } = useAuth();
 
 
   const groupDialogueHandler=()=>{
@@ -88,6 +98,7 @@ const DeskLeftNav = () =>{
           <ListItemText primary="Kravins" sx={{ color: "#ff4b3a" }} />
         </ListItemButton>
       </ListItem>
+      {authed &&
       <ListItem key="My Posts" disablePadding>
         <ListItemButton component={NavLink} to='myprofile/myposts'>
           <ListItemIcon sx={{ color: "#ff4b3a" }}>
@@ -95,9 +106,10 @@ const DeskLeftNav = () =>{
           </ListItemIcon>
           <ListItemText primary="My Posts" sx={{ color: "#ff4b3a" }} />
         </ListItemButton>
-      </ListItem>
+      </ListItem>}
     </List>
     <Divider />
+    {authed &&
     <List>
       <ListItem key="Create Post" disablePadding>
         <ListItemButton onClick={postDialogueHandler}>
@@ -115,9 +127,10 @@ const DeskLeftNav = () =>{
           <ListItemText primary="Create Group" />
         </ListItemButton>
       </ListItem>
-    </List>
+    </List>}
+    {authed && <>
     <CreatePostPage open={openPostDialogue} close={postDialogueHandler}/>
-    <CreateGroup open={openGroupDialogue} close={groupDialogueHandler}/>
+    <CreateGroup open={openGroupDialogue} close={groupDialogueHandler}/></>}
   </div>)
   }
 

@@ -34,7 +34,7 @@ export const AuthProvider = (props: CPCprops) => {
   // Using the useState hook to keep track of the value authed (if a
   // user is logged in)
 
-  const [authed, setAuthed] = useState<boolean>(true); //set to false after done frontend editing with bottomNav
+  const [authed, setAuthed] = useState<boolean>(false); 
 
   const login = async (): Promise<void> => {
     const result = await fakeAsyncLogin();

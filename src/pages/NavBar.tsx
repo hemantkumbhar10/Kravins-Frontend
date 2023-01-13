@@ -4,8 +4,6 @@ import { Box } from "@mui/material";
 
 import { viewportContext } from "../contexts/ViewportProvider";
 
-import { useAuth } from "../hooks/useAuth";
-
 import classes from './styles/NavBar.module.css';
 import DeskLeftNav from "../components/Navbars/DeskLeftNav";
 
@@ -13,7 +11,6 @@ import DeskLeftNav from "../components/Navbars/DeskLeftNav";
 const NavBar = () => {
   const { width } = React.useContext(viewportContext);
 
-  const { authed } = useAuth();
 
   const breakpoint = 900;
   
@@ -53,7 +50,7 @@ const NavBar = () => {
           justifyContent: "space-between",
         }}
       >
-        {authed && leftMenuDesktop}
+        {leftMenuDesktop}
       </Box>
     </>
   );

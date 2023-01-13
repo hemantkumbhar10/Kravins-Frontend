@@ -1,29 +1,90 @@
-import React, { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
-import useLocalStorage from "./useLocalStorage";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import {useNavigate,useLocation} from 'react-router-dom';
+import { signUp } from "../services/Auth/Signup.api";
+import Cookies from 'js-cookie';
+import axios from "axios";
 
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  authToken?: string;
+
+interface AuthContextType{
+  user?: UserType;
+  loading:boolean;
+  error?:any;
+  authenticated?:boolean;
+  setAuthenticated?:(arg:boolean)=>void;
+  register:(data:UserType)=>void;
 }
 
-const useUser = () => {
-  const { user, setUser } = useContext(AuthContext);
-  const { setItem } = useLocalStorage();
+//MOVE THIS IN THE CONTEXT
+const AuthContext = createContext<AuthContextType>({} as AuthContextType);
 
-  const addUser = (user: User) => {
-    setUser(user);
-    setItem("user", JSON.stringify(user));
-  };
 
-  const removeUser = () => {
-    setUser(null);
-    setItem("user", "");
-  };
+//PROVIDER TO EXPORT KEEP THIS IN THE HOOK
 
-  return { user, addUser, removeUser };
-};
+const AuthProvider=({children}:{children:ReactNode}):JSX.Element=>{
 
-export default useUser;
+  const [user, setUser] = useState<UserType>();
+  const [authenticated, setAuthenticated] =useState(false);
+  const [error,setError] = useState<any>();
+  const [loading,setLoading] = useState<boolean>(false);
+  const [loadingInitial, setLoadingInitial] = useState<boolean>(true);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  //CHANGING ERROR STATE IF WE CHANGE PAGE
+  useEffect(()=>{
+    if(error){
+      setError(null);
+    }
+  },[location.pathname]);
+
+
+  
+  //MAKE SIGNUP CALL AND FILL THE CONTEXT UP WITH DETAILS
+  function register(data:UserType){
+    setLoading(true);
+    // axios.defaults.withCredentials = true;
+    signUp(data).then((user)=>{
+      setUser(user);
+      setAuthenticated(true);
+      navigate('/home');
+    }).catch((error)=>setError(error)).finally(()=>setLoading(false));
+   
+  }
+
+  //PROVIDED SHOULD ONLY UPDATE WHEN THER IS NEED
+  //JUST BECAUSE ONE THING CHAGES WE SHOULD NOT CHANGINg
+  //WHOLE TREE. THAT WOULD BE COSTLY
+  //SO WE USE USE MEMO
+
+  const memoedValue = useMemo(
+    ()=>({
+      user,
+      loading,
+      error,
+      authenticated,
+      setAuthenticated,
+      register,
+    }),[user,loading,error]
+  ) ;
+
+  return(
+    <AuthContext.Provider value={memoedValue}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export {AuthProvider}
+
+//USING CONTEXT AND RETURNING ITS VALUE
+export default function useAuth(){
+  return useContext(AuthContext);
+}

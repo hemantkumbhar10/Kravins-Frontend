@@ -1,6 +1,9 @@
-import React, { useState, SyntheticEvent } from "react";
+import React, { useState, useContext, FormEvent } from "react";
+import { Navigate } from "react-router-dom";
 import useInput from "../hooks/use-intput";
-import useAuth from "../hooks/useUser";
+// import useAuth from "../hooks/useUser";
+import { AuthContext } from "../contexts/AuthContext";
+import { signUp } from "../services/Auth/Signup.api";
 
 import {
   Box,
@@ -51,11 +54,12 @@ const isEmail = (value: string) => value.match(mailFormat);
 const isPassword = (value: string) => value.match(passwordFormat);
 
 const Signup = () => {
-  const [verificationQuestion, setVerificationQuestion] = useState(
-    "What city you were born in?"
-  );
+  const authContext = useContext(AuthContext);
+  const [verificationQuestion, setVerificationQuestion] = useState("What city you were born in?");
+  const [navigateOnLogin, setNavigateOnLogin] = useState<boolean>(false);
 
-  const { register, loading, error } = useAuth();
+
+  // const { register, loading, error } = useAuth();
 
   const handleChange = (event: SelectChangeEvent) => {
     setVerificationQuestion(event.target.value as string);
@@ -127,7 +131,7 @@ const Signup = () => {
     formIsValid = true;
   }
 
-  const formSubmissionHandler = (e: SyntheticEvent) => {
+  const formSubmissionHandler = async(e: FormEvent) => {
     e.preventDefault();
 
     if (
@@ -140,12 +144,12 @@ const Signup = () => {
     ) {
       return;
     }
-    let verfication_handler = {
-      [verificationQuestion]: verficationAnswerValue,
-    };
+    // let verfication_handler = {
+    //   [verificationQuestion]: verficationAnswerValue,
+    // };
     // console.log(usernameValue, emailValue, passwordValue,passwordConfirmValue, verfication_handler);
 
-    let data = {
+    let form_data = {
       username: usernameValue,
       email: emailValue,
       password: finalPassword,
@@ -156,9 +160,13 @@ const Signup = () => {
     };
     // console.log(data);
 
-    register(data);
+    const {data}:any = await signUp(form_data);
 
-
+    authContext.setAuthState(data);
+    setNavigateOnLogin(true);
+    console.log(data);
+    
+    
     resetUsernameInput();
     resetEmailInput();
     resetPasswordInput();
@@ -167,6 +175,8 @@ const Signup = () => {
   };
 
   return (
+    <>
+    {navigateOnLogin && (<Navigate to='/home' replace={true}/>)}
     <Box
       component="form"
       className={classes.box}
@@ -297,6 +307,7 @@ const Signup = () => {
         disableProp={!formIsValid}
       />
     </Box>
+    </>
   );
 };
 

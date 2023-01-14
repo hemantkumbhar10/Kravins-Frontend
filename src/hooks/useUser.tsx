@@ -54,6 +54,7 @@ const AuthProvider=({children}:{children:ReactNode}):JSX.Element=>{
     signUp(data).then((user)=>{
       setUser(user);
       setAuthenticated(true);
+      console.log(user);
       navigate('/home');
     }).catch((error)=>setError(error)).finally(()=>setLoading(false));
    

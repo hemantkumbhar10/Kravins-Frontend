@@ -49,7 +49,7 @@ const passwordFormat: RegExp =
 
 const isNotEmpty = (value: string) => value.trim() !== "";
 const isWithinLimmit = (value: string) =>
-  value.trim().length > 15 ? false : true;
+  value.trim().length > 15 ? false : true && value.trim() !== "";
 const isEmail = (value: string) => value.match(mailFormat);
 const isPassword = (value: string) => value.match(passwordFormat);
 
@@ -199,7 +199,7 @@ const Signup = () => {
         onChange={usernameChangeHandler}
         onBlur={usernameBlurHandler}
         value={usernameValue}
-        helperText={usernameHasError && "Username is too long"}
+        helperText={usernameHasError && "Username is empty or too big!"}
       />
       <TextField
         autoComplete="on"

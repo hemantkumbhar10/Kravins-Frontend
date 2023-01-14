@@ -1,4 +1,4 @@
-import * as React from "react";
+import React,{useContext} from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -25,7 +25,8 @@ import Button from "@mui/material/Button";
 
 
 // import { useAuth } from "../../hooks/useAuth"
-import useAuth from "../../hooks/useUser";
+// import useAuth from "../../hooks/useUser";
+import { AuthContext } from "../../contexts/AuthContext";
 
 
 
@@ -53,7 +54,7 @@ const MyNavLink = React.forwardRef<any, any>((props, ref) => (
 
 const TopNavBar = () => {
 
-  const {user, authenticated} = useAuth();
+  const {isAuthenticated} = useContext(AuthContext);
 
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -93,7 +94,7 @@ const TopNavBar = () => {
   };
 
   const showUser = ()=>{
-    console.log(user);
+    console.log(isAuthenticated);
   }
 
   return (
@@ -128,14 +129,14 @@ const TopNavBar = () => {
                 sx={{ width: 30, height: 30 }}
               />
             </IconButton>
-            {authenticated ? menu : ''}
+            {isAuthenticated() ? menu : ''}
           </Box>
           {/* Bottomnav///////////////////////////////////////////////////////////////////////////////////////// */}
          {bottomnav}
           {/* Bottomnav///////////////////////////////////////////////////////////////////////////////////////// */}
 
           <Box sx={{ flexGrow: 0 }}>
-              {authenticated && <Tooltip title="Open settings">
+              {isAuthenticated() && <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     alt="Remy Sharp"
@@ -144,7 +145,7 @@ const TopNavBar = () => {
                   />
                 </IconButton>
               </Tooltip>}
-            {!authenticated && (
+            {!isAuthenticated() && (
               <Button
                 size="small"
                 color="success"
@@ -155,7 +156,7 @@ const TopNavBar = () => {
                 Login
               </Button>
             )}
-            {authenticated && 
+            {isAuthenticated() && 
             <Menu
               sx={{ mt: "45px", zIndex:888888 }}
               id="menu-appbar"

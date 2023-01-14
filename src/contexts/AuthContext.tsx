@@ -36,6 +36,7 @@ const AuthProvider = ({children}:{children:ReactNode})=>{
     userInfo: userInfo ? JSON.parse(userInfo) : {},
   });
 
+
   const setAuthInfo =({token, userInfo, expiresAt}:authStateType)=>{
 
     localStorage.setItem("userInfo", JSON.stringify(userInfo));
@@ -50,12 +51,16 @@ const AuthProvider = ({children}:{children:ReactNode})=>{
     navigate('/home');
   }
 
+
+  
+
   const isAuthenticated = () =>{
-    if(!authState.token || !authState.expiresAt){
+    if(!authState.userInfo || !authState.expiresAt){
       return false;
     }
 
     //Dividing by 1000 we get miliseconds value and expires at is in seconds
+   
     return new Date().getTime() / 1000 < authState.expiresAt;
   }
 

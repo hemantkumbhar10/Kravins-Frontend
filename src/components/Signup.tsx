@@ -57,6 +57,7 @@ const Signup = () => {
   const authContext = useContext(AuthContext);
   const [verificationQuestion, setVerificationQuestion] = useState("What city you were born in?");
   const [navigateOnLogin, setNavigateOnLogin] = useState<boolean>(false);
+  const [signUpError, setSignUpError] = useState('');
 
 
   // const { register, loading, error } = useAuth();
@@ -160,28 +161,34 @@ const Signup = () => {
     };
     // console.log(data);
 
-    const {data}:any = await signUp(form_data);
-
-    authContext.setAuthState(data);
-    setNavigateOnLogin(true);
-    console.log(data);
-    
-    
-    resetUsernameInput();
-    resetEmailInput();
-    resetPasswordInput();
-    resetVerficationAnswerInput();
-    resetPasswordConfirmInput();
+    try{
+      const {data}:any = await signUp(form_data);
+      authContext.setAuthState(data);
+     
+      setNavigateOnLogin(true);
+      setSignUpError('');
+      // console.log(data);
+      resetUsernameInput();
+      resetEmailInput();
+      resetPasswordInput();
+      resetVerficationAnswerInput();
+      resetPasswordConfirmInput();
+    }catch(error:any){
+      const {data} = error.response;
+      setSignUpError(data.message);
+    }
   };
 
   return (
     <>
+    
     {navigateOnLogin && (<Navigate to='/home' replace={true}/>)}
     <Box
       component="form"
       className={classes.box}
       onSubmit={formSubmissionHandler}
     >
+      {signUpError && <Typography sx={{fontSize:'14px', color:'red'}}>{signUpError}</Typography>}
       <TextField
         autoComplete="on"
         error={usernameHasError ? true : false}

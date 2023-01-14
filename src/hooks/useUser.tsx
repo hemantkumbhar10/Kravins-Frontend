@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 import {useNavigate,useLocation} from 'react-router-dom';
-import { signUp } from "../services/Auth/Signup.api";
+import { signUp } from "../services/Auth/Sessions.api";
 import Cookies from 'js-cookie';
 import axios from "axios";
 

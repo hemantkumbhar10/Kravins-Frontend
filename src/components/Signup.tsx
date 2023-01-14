@@ -1,9 +1,9 @@
 import React, { useState, useContext, FormEvent } from "react";
 import { Navigate } from "react-router-dom";
 import useInput from "../hooks/use-intput";
-// import useAuth from "../hooks/useUser";
+
 import { AuthContext } from "../contexts/AuthContext";
-import { signUp } from "../services/Auth/Signup.api";
+import { signUp } from "../services/Auth/Sessions.api";
 
 import {
   Box,
@@ -25,22 +25,6 @@ const styles = {
   color: "#ffffff",
   backgroundColor: "#FF4B3A",
 };
-
-/**
- * FOR BACKEND
- *
- * REMEMBER TO MODIFY VERFICATION QUESTION AND ANSWER OBJECT HANDLER IN SIGNUP CONTROLLER
- *
- * VERFICATION QUESTIONS ARE KEY VALUE PAIRS
- *
- * HENCE MODIFY IT IN MONGO SCHEMA AND CONTROLLER
- *
- * KEY ARE NUMBERS CONVERTED TO STRING SO ILL BE EASY TO FIND FROM DB LATER. PS. MAKE RELATIVE CHANGES IN CONTROLLER
- *
- * ALSO LIMIT USERNAME CHARACTERS TO 15 CHARACTERS
- *
- * MAKE SURE TO DELETE THIS COMMENT WHEN DONE IN BACKEND
- */
 
 // eslint-disable-next-line
 const mailFormat: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;

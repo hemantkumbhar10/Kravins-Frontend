@@ -1,3 +1,5 @@
+import React, {useState, useContext, FormEvent} from 'react';
+
 import useInput from "../hooks/use-intput";
 
 import { Box } from "@mui/material";
@@ -5,8 +7,9 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../hooks/useAuth";
+import { Navigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
+import { login } from "../services/Auth/Sessions.api";
 
 import Button from "./Button";
 
@@ -30,9 +33,11 @@ const isEmail = (value: string) => value.match(mailFormat);
 const isPassword = (value: string) => value.match(passwordFormat);
 
 const Login = () => {
-  const navigate = useNavigate();
 
-  const { login } = useAuth(); 
+  const authContext = useContext(AuthContext);
+  const [loginError, setLoginError] = useState<string | undefined>('');
+  const [navigateOnLogin, setNavigateOnLogin] = useState<boolean>(false);
+ 
 
   const {
     value: emailValue,
@@ -58,26 +63,40 @@ const Login = () => {
     formIsValid = true;
   }
 
-  const formSubmissionHandler = (e: SyntheticEvent) => {
+  const formSubmissionHandler = async(e:FormEvent) => {
     e.preventDefault();
-
-    // console.log(emailValue, passwordValue);
-
     if (!emailIsValid && !passwordIsValid) {
       return;
     }
-    login()
-    resetEmailInput();
-    resetPasswordInput();
-    navigate("/home");
+
+    let login_data = {
+      email:emailValue,
+      password:passwordValue,
+    }
+
+    try{
+      const {data}:any = await login(login_data);
+      authContext.setAuthState(data);
+
+      setNavigateOnLogin(true);
+      setLoginError('');
+      resetEmailInput();
+      resetPasswordInput();
+    }catch(error:any){
+      const {data} = error.response;
+      setLoginError(data.message);
+    }
   };
 
   return (
+    <>
+     {navigateOnLogin && (<Navigate to='/home' replace={true}/>)}
     <Box
       component="form"
       className={classes.box}
       onSubmit={formSubmissionHandler}
     >
+      {loginError && <Typography sx={{fontSize:'14px', color:'red'}}>{loginError}</Typography>}
       <TextField
         autoComplete="on"
         error={emailHasError ? true : false}
@@ -126,6 +145,7 @@ const Login = () => {
       </div>
       <Button title="Login" customStyles={styles} disableProp={!formIsValid} />
     </Box>
+    </>
   );
 };
 

@@ -10,6 +10,7 @@ interface UserType {
     email:string,
     password:string,
     verificationquestion?:{question:string,answer:string},
+    profilepic?:string,
   }
   
   declare global {

@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React,{useState,useContext} from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,6 +12,10 @@ import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { NavLink } from "react-router-dom";
+import { AuthContext } from "../../contexts/AuthContext";
+import { signout, posts } from "../../services/Auth/Sessions.api";
+import { redirect } from "react-router-dom";
+
 
 
 import darklogo from "../../assets/DarkLogo.png";
@@ -26,8 +30,6 @@ import Button from "@mui/material/Button";
 
 // import { useAuth } from "../../hooks/useAuth"
 // import useAuth from "../../hooks/useUser";
-import { AuthContext } from "../../contexts/AuthContext";
-
 
 
 
@@ -54,7 +56,7 @@ const MyNavLink = React.forwardRef<any, any>((props, ref) => (
 
 const TopNavBar = () => {
 
-  const {isAuthenticated} = useContext(AuthContext);
+  const {isAuthenticated, logout} = useContext(AuthContext);
 
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -63,6 +65,7 @@ const TopNavBar = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+  const [logoutError, setLogoutError] = useState<string | undefined>('');
 
   const { width } = React.useContext(viewportContext);
 
@@ -93,12 +96,29 @@ const TopNavBar = () => {
     setAnchorElUser(null);
   };
 
-  const showUser = ()=>{
-    console.log(isAuthenticated);
+  const showUser = async()=>{
+    try{
+      const {data}:any = await signout();
+      logout();
+      console.log("LOGOUT DAtA: ",data);
+      redirect('/home');
+    }catch(err:any){
+      const {data} = err.response;
+      setLogoutError(err.message);
+      console.log(err);
+    }
+  }
+
+
+
+  const showposts =async()=>{
+    const {data}:any = await posts();
+    console.log("THIS IS DATA : ",data);
   }
 
   return (
     <AppBar position="fixed" sx={{ height: "50px", backgroundColor:'#34465d' }}>
+     <Typography onClick={showposts}>showposts</Typography>
       <Container
         maxWidth="xl"
         sx={{

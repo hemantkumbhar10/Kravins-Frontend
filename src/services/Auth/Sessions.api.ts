@@ -8,7 +8,10 @@ let axiosConfig = {
   headers: {
     "Content-Type": "application/json",
   },
-  withCredentials:true
+  withCredentials:true,
+};
+let axiosConfiged = {
+  withCredentials:true,
 };
 
 export async function signUp(data: UserType): Promise<UserType> {
@@ -20,3 +23,17 @@ export async function login(data: UserType): Promise<UserType> {
   const response: UserType = await publicFetch.post('login', data,axiosConfig);
   return response;
 }
+
+
+export async function signout(){
+  const response = await publicFetch.post('logout', axiosConfig);
+  return response;
+}
+
+
+export async function posts(){
+  const response = await publicFetch.get('dummy', axiosConfig);
+  return response;
+}
+
+

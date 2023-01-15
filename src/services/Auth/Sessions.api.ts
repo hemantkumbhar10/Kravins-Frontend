@@ -15,7 +15,7 @@ let axiosConfiged = {
 };
 
 export async function signUp(data: UserType): Promise<UserType> {
-  const response: UserType = await axios.post(`${URL}signup`, data,axiosConfig);
+  const response: UserType = await publicFetch.post(`signup`, data,axiosConfig);
   return response;
 }
 

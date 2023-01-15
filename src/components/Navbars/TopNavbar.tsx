@@ -109,16 +109,8 @@ const TopNavBar = () => {
     }
   }
 
-
-
-  const showposts =async()=>{
-    const {data}:any = await posts();
-    console.log("THIS IS DATA : ",data);
-  }
-
   return (
     <AppBar position="fixed" sx={{ height: "50px", backgroundColor:'#34465d' }}>
-     <Typography onClick={showposts}>showposts</Typography>
       <Container
         maxWidth="xl"
         sx={{

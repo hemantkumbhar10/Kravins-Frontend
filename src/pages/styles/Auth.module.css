@@ -14,7 +14,7 @@
     display: none !important;
     width: 70%;
     height: 100vh;
-    background-color: var(--orange);
+    background-color: #ac8f8f;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -22,7 +22,7 @@
 }
 
 .hero_titles{
-    margin:0 0 45px 0;
+    margin:0 0 0 0;
 }
 
 .hero_titles h1{

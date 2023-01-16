@@ -1,13 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { ThemeProvider } from "@mui/material";
 import classes from "./App.module.css";
 import theme from "./theme";
 import { ViewportProvider } from "./contexts/ViewportProvider";
 
 import { AuthProvider } from "./contexts/AuthContext";
-// import { AuthProvider } from "./hooks/useUser";
-
-import { Routes, Route, Outlet, Link } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 
 import Welcome from "./pages/Welcome";
@@ -19,66 +17,32 @@ import PostsPage from "./pages/PostsPage";
 import CocktailsPage from "./pages/CocktailsPage";
 import NutrientsPage from "./pages/NutrientsPage";
 import FunzonePage from "./pages/FunzonePage";
-import CreateGroup from "./Subpages/CreateGroup";
 import GroupList from "./components/UserProfile/GroupList";
-import CreatePostPage from "./pages/CreatePostPage";
 import Notifications from "./components/Notifications";
 import Chat from "./components/Chats/Chat";
 import ChatHome from "./components/Chats/ChatHome";
-import {viewportContext} from './contexts/ViewportProvider';
 import UserProfile from "./pages/UserProfile";
 import FriendList from "./components/UserProfile/FriendList";
 import UsersPosts from "./components/UserProfile/UsersPosts";
 import NoMatch from "./pages/NoMatch";
+import { AuthContext } from "./contexts/AuthContext";
 // import UserProfile from './pages/UserProfile';
 // import GroupPage from './pages/GroupPage';
 // import CreateGroup from './Subpages/CreateGroup';
 
-/**
- *
- * TODAYS TASK FOR FRONTEND...
- *
- *
- * 1. ///////////////////REACT ROUTER DOM///////////////////
- *
- * 
- * Rearranging navs
- * 
- * 
- * For mobile and small tabs keeps tabs as it is
- * 
- * 
- * for desktop and large screens make separate navs
- * 
- * 
- * Left desktop nav
- *      Home
- *      Kravins
- *      Create Post dialogue box and remove route
- *      Create group dialogue box and remove route
- *      /////Bellow divider/////
- *          Notifications dialogue without backdrop
- *          Chats Dialogue without backdrop
- *
- *
- *
- *CHEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEERS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- *
- */
 
-function App() {
 
- const width = window.innerWidth;
- console.log(width)
+const AppRoutes = () =>{
+  const width = window.innerWidth;
 
   const desktop_breakpoint = 900;
 
+  const {isAuthenticated} = useContext(AuthContext);
+  
+  const isUser = isAuthenticated();
 
-  return (
-    <ThemeProvider theme={theme}>
-      <ViewportProvider>
-        <AuthProvider>
-          <div className={classes.app}>
+  return(
+    <div className={classes.app}>
             <Routes>
               <Route index element={<Welcome />} />
               <Route path="/" element={<Welcome />} />
@@ -94,16 +58,16 @@ function App() {
                   <Route path="nutrients" element={<NutrientsPage/>} />
                   <Route path="kravinsextra" element={<FunzonePage/>} />
                 </Route>
-                <Route path="myprofile" element={<UserProfile/>}>
+                <Route path="myprofile" element={isUser ? <UserProfile/>: <Navigate to='/home'/>}>
                   <Route index element={<FriendList/>}/>
                   <Route path='' element={<FriendList/>}/>
                   <Route path='mygroups' element={<GroupList/>}/>
                   <Route path='myposts' element={<UsersPosts/>}/>
                 </Route>
-                {width < desktop_breakpoint && <Route path="notifications" element={<Notifications/>}/>}
+                {width < desktop_breakpoint && <Route path="notifications" element={isUser ? <Notifications/>: <Navigate to='/home'/>}/>}
                 {width < desktop_breakpoint && 
-                <Route path="chats" element={<ChatHome/>}>
-                  <Route path='jhondoe' element={<Chat/>}/>
+                <Route path="chats" element={isUser ? <ChatHome/>: <Navigate to='/home'/>}>
+                  <Route path='jhondoe' element={isUser ? <Chat/>: <Navigate to='/home'/>}/>
                 </Route>
                 }
               </Route>
@@ -117,6 +81,20 @@ function App() {
             {/* <GroupPage/> */}
             {/* <CreateGroup/> */}
           </div>
+  )
+}
+
+
+
+function App() {
+
+  const authContext = useContext(AuthContext);
+
+  return (
+    <ThemeProvider theme={theme}>
+      <ViewportProvider>
+        <AuthProvider>
+          <AppRoutes/>
         </AuthProvider>
       </ViewportProvider>
     </ThemeProvider>

@@ -1,27 +1,18 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
+import React,{useContext} from "react";
 import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Toolbar from "@mui/material/Toolbar";
-import Diversity1Icon from "@mui/icons-material/Diversity1";
 import SignpostSharpIcon from "@mui/icons-material/SignpostSharp";
-import PeopleAltSharpIcon from "@mui/icons-material/PeopleAltSharp";
 import Diversity2SharpIcon from "@mui/icons-material/Diversity2Sharp";
 import HomeIcon from "@mui/icons-material/Home";
 import RamenDiningIcon from "@mui/icons-material/RamenDining";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import SmsIcon from "@mui/icons-material/Sms";
 
+import { AuthContext } from "../../contexts/AuthContext";
 
 
 
@@ -31,7 +22,6 @@ import { NavLink } from "react-router-dom";
 import CreateGroup from "../../Subpages/CreateGroup";
 import CreatePostPage from "../../pages/CreatePostPage";
 
-import { useAuth } from "../../hooks/useAuth";
 
 
 
@@ -59,10 +49,10 @@ const MyNavLink = React.forwardRef<any, any>((props, ref) => (
 
 
 const DeskLeftNav = () =>{
+  const {isAuthenticated} =useContext(AuthContext);
   const [openPostDialogue, setOpenPostDialogue] = React.useState(false);
   const [openGroupDialogue, setOpenGroupDialogue] = React.useState(false);
 
-  const { authed } = useAuth();
 
 
   const groupDialogueHandler=()=>{
@@ -98,7 +88,7 @@ const DeskLeftNav = () =>{
           <ListItemText primary="Kravins" sx={{ color: "#ff4b3a" }} />
         </ListItemButton>
       </ListItem>
-      {authed &&
+      {isAuthenticated() &&
       <ListItem key="My Posts" disablePadding>
         <ListItemButton component={NavLink} to='myprofile/myposts'>
           <ListItemIcon sx={{ color: "#ff4b3a" }}>
@@ -109,7 +99,7 @@ const DeskLeftNav = () =>{
       </ListItem>}
     </List>
     <Divider />
-    {authed &&
+    {isAuthenticated() &&
     <List>
       <ListItem key="Create Post" disablePadding>
         <ListItemButton onClick={postDialogueHandler}>
@@ -128,7 +118,7 @@ const DeskLeftNav = () =>{
         </ListItemButton>
       </ListItem>
     </List>}
-    {authed && <>
+    {isAuthenticated() && <>
     <CreatePostPage open={openPostDialogue} close={postDialogueHandler}/>
     <CreateGroup open={openGroupDialogue} close={groupDialogueHandler}/></>}
   </div>)

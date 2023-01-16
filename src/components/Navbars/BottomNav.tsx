@@ -1,4 +1,4 @@
-import * as React from "react";
+import React,{useContext} from "react";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import HomeIcon from "@mui/icons-material/Home";
@@ -7,8 +7,7 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SmsIcon from "@mui/icons-material/Sms";
 
-
-import { useAuth } from "../../hooks/useAuth";
+import { AuthContext } from "../../contexts/AuthContext";
 import { NavLink } from "react-router-dom";
 
 import classes from "./styles/BottomNav.module.css";
@@ -31,7 +30,8 @@ const BottomNav = () => {
   const [value, setValue] = React.useState("recents");
   const [openPostDialogue, setOpenPostDialogue] = React.useState(false);
 
-  const { authed } = useAuth();
+  const {isAuthenticated} = useContext(AuthContext);
+
 
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -81,7 +81,7 @@ const BottomNav = () => {
           to="kravins"
           activeClassName="Mui-selected"
         />
-        {authed && (
+        {isAuthenticated() && (
           <BottomNavigationAction
            
             value="Create Post"
@@ -93,7 +93,7 @@ const BottomNav = () => {
             }
           />
         )}
-        {authed && (
+        {isAuthenticated() && (
           <BottomNavigationAction
             label="Notifications"
             value="Notifications"
@@ -104,7 +104,7 @@ const BottomNav = () => {
                 activeClassName="Mui-selected"
           />
         )}
-        {authed && (
+        {isAuthenticated() && (
           <BottomNavigationAction
             label="Chat"
             value="Chat"

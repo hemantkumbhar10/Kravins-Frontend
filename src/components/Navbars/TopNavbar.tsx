@@ -98,10 +98,10 @@ const TopNavBar = () => {
 
   const showUser = async()=>{
     try{
+      
       const {data}:any = await signout();
-      logout();
-      console.log("LOGOUT DAtA: ",data);
-      redirect('/home');
+      logout()
+      redirect('/home')
     }catch(err:any){
       const {data} = err.response;
       setLogoutError(err.message);

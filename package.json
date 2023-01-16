@@ -16,11 +16,13 @@
     "@types/js-cookie": "^3.0.2",
     "@types/node": "^16.18.3",
     "@types/react": "^18.0.25",
+    "@types/react-avatar-editor": "^13.0.0",
     "@types/react-dom": "^18.0.9",
     "axios": "^1.2.2",
     "emoji-mart": "^5.3.3",
     "js-cookie": "^3.0.1",
     "react": "^18.2.0",
+    "react-avatar-editor": "^13.0.0",
     "react-date-picker": "^9.1.0",
     "react-dom": "^18.2.0",
     "react-easy-crop": "^4.6.3",
@@ -55,5 +57,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy":"http://localhost:8081"
+  "proxy": "http://localhost:8081"
 }

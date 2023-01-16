@@ -17,6 +17,7 @@ import { TransitionProps } from "@mui/material/transitions";
 import Slide from "@mui/material/Slide";
 import { LabeledInput } from "../components/CustomTextField";
 import FormHelperText from "@mui/material/FormHelperText/FormHelperText";
+import AvatarUpload from "../components/AvatarUpload";
 
 import { useFormInput } from "../hooks/use-formInput";
 
@@ -70,6 +71,8 @@ var password = "admin@123";
 
 const EditUserProfile = ({ open, close }: DProps) => {
   const [date, setDate] = useState(new Date());
+  const [openAvatarUploader, setOpenAvatarUploader] = useState(false);
+
 
   const {
     value: fullNameValue,
@@ -109,6 +112,11 @@ const EditUserProfile = ({ open, close }: DProps) => {
     formIsValid = true;
   }
 
+  const closeAvatarUploader =()=>{
+    console.log('avatar uploader clicked!')
+    setOpenAvatarUploader((openAvatarUploader) => !openAvatarUploader);
+   }
+
   const formSubmissionHandler = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -127,6 +135,7 @@ const EditUserProfile = ({ open, close }: DProps) => {
   };
 
   return (
+    <>
     <Dialog
       sx={{
         zIndex: 999999,
@@ -160,6 +169,7 @@ const EditUserProfile = ({ open, close }: DProps) => {
         <Box
           width="100%"
           sx={{ display: "flex", justifyContent: "center", my: 2 }}
+          
         >
           <ImageStyled
             src={userImage}
@@ -169,6 +179,7 @@ const EditUserProfile = ({ open, close }: DProps) => {
               height: { xs: 80, md: 100 },
               width: { xs: 80, md: 100 },
             }}
+            onClick={closeAvatarUploader}
           />
         </Box>
         <Box component="form">
@@ -295,6 +306,8 @@ const EditUserProfile = ({ open, close }: DProps) => {
         </Stack>
       </Paper>
     </Dialog>
+    <AvatarUpload close={closeAvatarUploader} open={openAvatarUploader}/>
+   </>
   );
 };
 

@@ -1,9 +1,7 @@
 import React, {useState} from "react";
 import Typography from "@mui/material/Typography";
-import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import Slide from "@mui/material/Slide";
 import { Grid, styled } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack/Stack";
@@ -16,6 +14,7 @@ import userImage from "../assets/salat.png";
 import classes from "./styles/UserProfile.module.css";
 import { NavLink, Outlet } from "react-router-dom";
 import EditUserProfile from "../Subpages/EditUserProfile";
+import AvatarUpload from "../components/AvatarUpload";
 
 const MyNavLink = React.forwardRef<any, any>((props, ref) => (
   <NavLink
@@ -52,6 +51,7 @@ const UserProfile = () => {
 
 
   return (
+    <>
     <Box sx={{maxHeight:'100%',  pt:{md:7,xs:0},m:'auto', mx:0,width:'100%',}} >
       <Paper
         sx={{ width: { xs: "100%", md: "95%" },
@@ -75,6 +75,7 @@ const UserProfile = () => {
                 height: { xs: 70, md: 70 },
                 width: { xs: 70, md: 70 },
               }}
+              
             />
             <Box ml={2}>
               <Typography
@@ -246,6 +247,8 @@ const UserProfile = () => {
       </Container>
       <EditUserProfile close={editProfileDialogHandler} open={openEditProfileDialoug}/>
     </Box>
+    
+    </>
   );
 };
 

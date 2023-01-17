@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import DatePicker from "react-date-picker";
 
 import useInput from "../hooks/use-intput";
@@ -24,6 +24,7 @@ import { useFormInput } from "../hooks/use-formInput";
 import userImage from "../assets/salat.png";
 
 import classes from "./styles/EditUserProfile.module.css";
+import ImageButtonBases from "../components/commons/ImageButtonBases";
 
 /**
  *
@@ -72,7 +73,7 @@ var password = "admin@123";
 const EditUserProfile = ({ open, close }: DProps) => {
   const [date, setDate] = useState(new Date());
   const [openAvatarUploader, setOpenAvatarUploader] = useState(false);
-
+  const [isClickedImage, setIsClickedImage] = useState(false);
 
   const {
     value: fullNameValue,
@@ -112,10 +113,9 @@ const EditUserProfile = ({ open, close }: DProps) => {
     formIsValid = true;
   }
 
-  const closeAvatarUploader =()=>{
-    console.log('avatar uploader clicked!')
+  const closeAvatarUploader =useCallback(() => {
     setOpenAvatarUploader((openAvatarUploader) => !openAvatarUploader);
-   }
+  }, [openAvatarUploader]);
 
   const formSubmissionHandler = (e: React.FormEvent) => {
     e.preventDefault();
@@ -133,6 +133,9 @@ const EditUserProfile = ({ open, close }: DProps) => {
     resetUsernameInput();
     resetEmailInput();
   };
+
+
+
 
   return (
     <>
@@ -171,16 +174,7 @@ const EditUserProfile = ({ open, close }: DProps) => {
           sx={{ display: "flex", justifyContent: "center", my: 2 }}
           
         >
-          <ImageStyled
-            src={userImage}
-            alt="user"
-            sx={{
-              m: "auto",
-              height: { xs: 80, md: 100 },
-              width: { xs: 80, md: 100 },
-            }}
-            onClick={closeAvatarUploader}
-          />
+        <ImageButtonBases url={userImage} title='Edit'click={closeAvatarUploader}/>
         </Box>
         <Box component="form">
           <Grid container spacing={1}>

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { publicFetch } from "../../utils/fetch";
+import { publicFetch } from "../utils/fetch";
 
 const URL = process.env.REACT_APP_BACKEND_URL;
 // const URL = "/signup";

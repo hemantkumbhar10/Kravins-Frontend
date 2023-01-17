@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import useInput from "../hooks/use-intput";
 
 import { AuthContext } from "../contexts/AuthContext";
-import { signUp } from "../services/Auth/Sessions.api";
+import { signUp } from "../services/Sessions.api";
 
 import {
   Box,

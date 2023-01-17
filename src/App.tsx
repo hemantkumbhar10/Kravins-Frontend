@@ -87,9 +87,6 @@ const AppRoutes = () =>{
 
 
 function App() {
-
-  const authContext = useContext(AuthContext);
-
   return (
     <ThemeProvider theme={theme}>
       <ViewportProvider>

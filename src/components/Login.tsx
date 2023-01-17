@@ -9,7 +9,7 @@ import Link from "@mui/material/Link";
 
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
-import { login } from "../services/Auth/Sessions.api";
+import { login } from "../services/Sessions.api";
 
 import Button from "./Button";
 

@@ -13,7 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { NavLink } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
-import { signout, posts } from "../../services/Auth/Sessions.api";
+import { signout, posts } from "../../services/Sessions.api";
 import { redirect } from "react-router-dom";
 
 

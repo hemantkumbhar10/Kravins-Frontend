@@ -26,6 +26,7 @@ import FriendList from "./components/UserProfile/FriendList";
 import UsersPosts from "./components/UserProfile/UsersPosts";
 import NoMatch from "./pages/NoMatch";
 import { AuthContext } from "./contexts/AuthContext";
+import { PrivateFetchProvider } from "./contexts/PrivateFetchContext";
 // import UserProfile from './pages/UserProfile';
 // import GroupPage from './pages/GroupPage';
 // import CreateGroup from './Subpages/CreateGroup';
@@ -91,7 +92,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <ViewportProvider>
         <AuthProvider>
+          <PrivateFetchProvider>
           <AppRoutes/>
+          </PrivateFetchProvider>
         </AuthProvider>
       </ViewportProvider>
     </ThemeProvider>

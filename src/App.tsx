@@ -7,7 +7,6 @@ import { ViewportProvider } from "./contexts/ViewportProvider";
 import { AuthProvider } from "./contexts/AuthContext";
 import { Routes, Route, Navigate } from "react-router-dom";
 
-
 import Welcome from "./pages/Welcome";
 import Auth from "./pages/Auth";
 import Homepage from "./pages/Homepage";
@@ -26,75 +25,85 @@ import FriendList from "./components/UserProfile/FriendList";
 import UsersPosts from "./components/UserProfile/UsersPosts";
 import NoMatch from "./pages/NoMatch";
 import { AuthContext } from "./contexts/AuthContext";
-import { PrivateFetchProvider } from "./contexts/PrivateFetchContext";
+import { FetchProvider } from "./contexts/PrivateFetchContext";
 // import UserProfile from './pages/UserProfile';
 // import GroupPage from './pages/GroupPage';
 // import CreateGroup from './Subpages/CreateGroup';
 
-
-
-const AppRoutes = () =>{
+const AppRoutes = () => {
   const width = window.innerWidth;
 
   const desktop_breakpoint = 900;
 
-  const {isAuthenticated} = useContext(AuthContext);
-  
+  const { isAuthenticated } = useContext(AuthContext);
+
   const isUser = isAuthenticated();
 
-  return(
+  return (
     <div className={classes.app}>
-            <Routes>
-              <Route index element={<Welcome />} />
-              <Route path="/" element={<Welcome />} />
-              <Route path="home" element={<Homepage />}>
-              {/* <Route path="mygroups" element={<GroupList />}/> */}
-                {/* <Route path="creategroup" element={<CreateGroup/>}/> */}
-                <Route index element={<PostsPage />} />
-                <Route path="" element={<PostsPage />} />
-                <Route path="kravins" element={<Kravin />} >
-                  <Route index element={<RecipePage />} />
-                  <Route path="" element={<RecipePage />} />
-                  <Route path="cocktails" element={<CocktailsPage/>} />
-                  <Route path="nutrients" element={<NutrientsPage/>} />
-                  <Route path="kravinsextra" element={<FunzonePage/>} />
-                </Route>
-                <Route path="myprofile" element={isUser ? <UserProfile/>: <Navigate to='/home'/>}>
-                  <Route index element={<FriendList/>}/>
-                  <Route path='' element={<FriendList/>}/>
-                  <Route path='mygroups' element={<GroupList/>}/>
-                  <Route path='myposts' element={<UsersPosts/>}/>
-                </Route>
-                {width < desktop_breakpoint && <Route path="notifications" element={isUser ? <Notifications/>: <Navigate to='/home'/>}/>}
-                {width < desktop_breakpoint && 
-                <Route path="chats" element={isUser ? <ChatHome/>: <Navigate to='/home'/>}>
-                  <Route path='jhondoe' element={isUser ? <Chat/>: <Navigate to='/home'/>}/>
-                </Route>
-                }
-              </Route>
-              <Route path="auth" element={<Auth />} />
-              <Route path="*" element={<NoMatch/>} />
-              
-            </Routes>
-            {/* <NavBar/> */}
-            {/* <Homepage/> */}
-            {/* <UserProfile/> */}
-            {/* <GroupPage/> */}
-            {/* <CreateGroup/> */}
-          </div>
-  )
-}
-
-
+      <Routes>
+        <Route index element={<Welcome />} />
+        <Route path="/" element={<Welcome />} />
+        <Route path="home" element={<Homepage />}>
+          {/* <Route path="mygroups" element={<GroupList />}/> */}
+          {/* <Route path="creategroup" element={<CreateGroup/>}/> */}
+          <Route index element={<PostsPage />} />
+          <Route path="" element={<PostsPage />} />
+          <Route path="kravins" element={<Kravin />}>
+            <Route index element={<RecipePage />} />
+            <Route path="" element={<RecipePage />} />
+            <Route path="cocktails" element={<CocktailsPage />} />
+            <Route path="nutrients" element={<NutrientsPage />} />
+            <Route path="kravinsextra" element={<FunzonePage />} />
+          </Route>
+          <Route
+            path="myprofile"
+            // element={isUser ? <UserProfile /> : <Navigate to="/home" />}
+            element={ <UserProfile /> }
+          >
+            <Route index element={<FriendList />} />
+            <Route path="" element={<FriendList />} />
+            <Route path="mygroups" element={<GroupList />} />
+            <Route path="myposts" element={<UsersPosts />} />
+          </Route>
+          {width < desktop_breakpoint && (
+            <Route
+              path="notifications"
+              element={isUser ? <Notifications /> : <Navigate to="/home" />}
+            />
+          )}
+          {width < desktop_breakpoint && (
+            <Route
+              path="chats"
+              element={isUser ? <ChatHome /> : <Navigate to="/home" />}
+            >
+              <Route
+                path="jhondoe"
+                element={isUser ? <Chat /> : <Navigate to="/home" />}
+              />
+            </Route>
+          )}
+        </Route>
+        <Route path="auth" element={<Auth />} />
+        <Route path="*" element={<NoMatch />} />
+      </Routes>
+      {/* <NavBar/> */}
+      {/* <Homepage/> */}
+      {/* <UserProfile/> */}
+      {/* <GroupPage/> */}
+      {/* <CreateGroup/> */}
+    </div>
+  );
+};
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <ViewportProvider>
         <AuthProvider>
-          <PrivateFetchProvider>
-          <AppRoutes/>
-          </PrivateFetchProvider>
+          <FetchProvider>
+            <AppRoutes />
+          </FetchProvider>
         </AuthProvider>
       </ViewportProvider>
     </ThemeProvider>

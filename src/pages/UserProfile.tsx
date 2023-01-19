@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useContext, useEffect} from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
@@ -6,6 +6,7 @@ import { Grid, styled } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack/Stack";
 import Button from "@mui/material/Button";
+import { FetchContext } from "../contexts/PrivateFetchContext";
 
 // import EditUserProfile from "../Subpages/EditUserProfile";
 
@@ -15,6 +16,7 @@ import classes from "./styles/UserProfile.module.css";
 import { NavLink, Outlet } from "react-router-dom";
 import EditUserProfile from "../Subpages/EditUserProfile";
 import AvatarUpload from "../components/AvatarUpload";
+import { publicFetch } from "../utils/fetch";
 
 const MyNavLink = React.forwardRef<any, any>((props, ref) => (
   <NavLink
@@ -34,9 +36,17 @@ const ImageStyled = styled("img")({
   zIndex: 1,
 });
 
-const UserProfile = () => {
+interface PrivateInfo{
+  
+  fullname:string | null,
+  username:string | null,
+  profilepic:string | null,
+}
 
+const UserProfile = () => {
+  const fetchcontext = useContext(FetchContext);
   const [openEditProfileDialoug, setOpenEditProfileDialog] = useState<boolean>(false);
+  const [userData, setUserData] = useState<PrivateInfo>({fullname:'', username:'', profilepic:''});
 
 
 
@@ -44,8 +54,34 @@ const UserProfile = () => {
     setOpenEditProfileDialog(!openEditProfileDialoug);
   }
 
+  
+  useEffect(()=>{
+    console.log('fetching data.....')
+    const userProfileData = async()=>{
+      try{
+        const {data}:any = await fetchcontext.authAxios.get('/myprofile');
+        setUserData({
+          fullname: data.fullname,
+          username:data.username,
+          profilepic:data.email
+        })
+        fetchcontext.setUserProfileInfo(data);
+      }catch(e){
+        console.log(e);
+      }
+    }
+    userProfileData();
+  },[]);
 
+  // const fetchDataAndShow= async()=>{
+  //   try{
+  //     const {data} = await publicFetch.get('/myprofile');
 
+  //     console.log(data);
+  //   }catch(e){
+  //     console.log(e);
+  //   }
+  // }
 
 
 
@@ -81,15 +117,14 @@ const UserProfile = () => {
               <Typography
                 sx={{ fontSize: { xs: "16px", md: "20px" }, color: "#333" }}
               >
-                Jhon Doe
+                {userData.fullname ? userData.fullname :userData.username}
               </Typography>
               <Typography
-                textAlign="center"
                 variant="subtitle1"
                 color="#757a95"
                 sx={{ fontSize: { xs: "16px", md: "14px" } }}
               >
-                @hamncheese69
+                @{userData.username}
               </Typography>
 
               <Button

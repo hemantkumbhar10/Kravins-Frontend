@@ -5,13 +5,18 @@
 import axios, { AxiosInstance } from "axios";
 import React, { useState, useEffect, createContext, ReactNode } from "react";
 
-type privateUserInfo = {}
+type privateUserInfo = {
+  fullname:string,
+}
 
 interface FetchContextProps {
   authAxios: any;
-  setUserProfileInfo:(data:privateUserInfo)=>void,
+  userProfileInfo:privateUserInfo,
+  setUserProfileInfo:(data:privateUserInfo,userinfo:userInfo)=>void,
 
 }
+
+type userInfo = {}
 
 const FetchContext = createContext<FetchContextProps>({} as FetchContextProps);
 const { Provider } = FetchContext;
@@ -34,14 +39,15 @@ const FetchProvider = ({ children }: { children: ReactNode }) => {
   //     // getCsrfToken();
   //   }, []);
 
-  const setPrivateProfileInfo =(data:privateUserInfo)=>{
+  const setPrivateProfileInfo =(data:privateUserInfo, userinfo:userInfo)=>{
+    localStorage.setItem("userInfo", JSON.stringify(userinfo));
     setUserProfileInfo(data);
   }
 
   const privateValues = {
     authAxios,
     userProfileInfo,
-    setUserProfileInfo:(data:privateUserInfo)=>setPrivateProfileInfo(data),
+    setUserProfileInfo:(data:privateUserInfo,userinfo:userInfo)=>setPrivateProfileInfo(data,userinfo),
     
   }
   return (

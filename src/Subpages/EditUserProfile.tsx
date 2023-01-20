@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import DatePicker from "react-date-picker";
 
 import useInput from "../hooks/use-intput";
@@ -9,14 +9,11 @@ import Typography from "@mui/material/Typography";
 import { Box } from "@mui/system";
 import { Stack, styled } from "@mui/material";
 import Button from "@mui/material/Button";
-import InputLabel from "@mui/material/InputLabel";
 
 import { Dialog, DialogActions } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { TransitionProps } from "@mui/material/transitions";
 import Slide from "@mui/material/Slide";
-import { LabeledInput } from "../components/CustomTextField";
-import FormHelperText from "@mui/material/FormHelperText/FormHelperText";
 import AvatarUpload from "../components/AvatarUpload";
 
 import { useFormInput } from "../hooks/use-formInput";
@@ -25,6 +22,10 @@ import userImage from "../assets/salat.png";
 
 import classes from "./styles/EditUserProfile.module.css";
 import ImageButtonBases from "../components/commons/ImageButtonBases";
+
+import { AuthContext } from "../contexts/AuthContext";
+import { FetchContext } from "../contexts/PrivateFetchContext";
+import { UpdateProfile } from "../services/protected/UserProfile.api";
 
 /**
  *
@@ -65,15 +66,27 @@ const isWithinLimmit = (value: string) =>
 
 const isEmail = (value: string) => value.match(mailFormat);
 
-var fullname = "Jhon Doe";
-var username = "@hamncheese69";
-var email = "admin@gmail.com";
-var password = "admin@123";
 
 const EditUserProfile = ({ open, close }: DProps) => {
+
+  const authContext =  useContext(AuthContext);
+  const fetchContext =  useContext(FetchContext);
+  const {authState} = authContext;
+  const {userProfileInfo} = fetchContext;
   const [date, setDate] = useState(new Date());
   const [openAvatarUploader, setOpenAvatarUploader] = useState(false);
   const [isClickedImage, setIsClickedImage] = useState(false);
+
+
+  // useEffect(()=>{
+  //   // setDate(date=>(authState.userInfo.birthdate))
+
+  // },[])
+
+
+  const fullname = userProfileInfo.fullname ? userProfileInfo.fullname : ''
+
+
 
   const {
     value: fullNameValue,
@@ -82,7 +95,7 @@ const EditUserProfile = ({ open, close }: DProps) => {
     valueChangeHandler: fullNameChangeHandler,
     inputBlurHandler: fullNameBlurHandler,
     reset: resetFullNameInput,
-  } = useFormInput(fullNameWithinLimmit, fullname);
+  } = useFormInput(fullNameWithinLimmit,fullname);
 
   const {
     value: usernameValue,
@@ -91,7 +104,7 @@ const EditUserProfile = ({ open, close }: DProps) => {
     valueChangeHandler: usernameChangeHandler,
     inputBlurHandler: usernameBlurHandler,
     reset: resetUsernameInput,
-  } = useFormInput(isWithinLimmit, username);
+  } = useFormInput(isWithinLimmit,authState.userInfo.username!);
 
   const {
     value: emailValue,
@@ -100,7 +113,7 @@ const EditUserProfile = ({ open, close }: DProps) => {
     valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
     reset: resetEmailInput,
-  } = useFormInput(isEmail, email);
+  } = useFormInput(isEmail, authState.userInfo.email!);
 
   let formIsValid = false;
 
@@ -117,7 +130,7 @@ const EditUserProfile = ({ open, close }: DProps) => {
     setOpenAvatarUploader((openAvatarUploader) => !openAvatarUploader);
   }, [openAvatarUploader]);
 
-  const formSubmissionHandler = (e: React.FormEvent) => {
+  const formSubmissionHandler = async(e: React.FormEvent) => {
     e.preventDefault();
 
     if (
@@ -129,6 +142,29 @@ const EditUserProfile = ({ open, close }: DProps) => {
       return;
     }
     console.log(usernameValue, emailValue, date);
+    // fullname:string,
+    // username:string,
+    // profilepic:string,
+    // email:string,
+    // birthdate:string
+
+    const userdata = {
+      fullname:fullNameValue,
+      email:emailValue,
+      username:usernameValue,
+      birthdate:date,
+      profilepic:''
+
+    }
+
+
+    try{
+
+      const data = await UpdateProfile(userdata)
+      console.log(data);
+    }catch(e){
+      console.log(e);
+    }
     resetFullNameInput();
     resetUsernameInput();
     resetEmailInput();

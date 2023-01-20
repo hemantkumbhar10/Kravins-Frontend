@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 
 interface authStateType{
-  token:string | null, expiresAt:number | null, userInfo: {}
+  token:string | null, expiresAt:number | null, userInfo: {username:string | null, profilepic:string | null, email:string | null}
 }
 
 
@@ -11,6 +11,7 @@ interface AuthContextType{
   isAuthenticated:()=>boolean,
   setAuthState:(authInfo:authStateType)=>void,
   logout:()=>void,
+  authState:authStateType,
   loading?:boolean;
   error?:any;
 }
@@ -47,7 +48,7 @@ const AuthProvider = ({children}:{children:ReactNode})=>{
   const logout = () =>{
     localStorage.removeItem("userInfo");
     localStorage.removeItem("expiresAt");
-    setAuthState({token:null,expiresAt:null, userInfo:{}});
+    setAuthState({token:null,expiresAt:null, userInfo:{username:null, profilepic:null, email:null}});
     navigate('/home');
   }
 

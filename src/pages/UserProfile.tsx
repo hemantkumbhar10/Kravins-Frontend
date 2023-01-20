@@ -7,6 +7,7 @@ import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack/Stack";
 import Button from "@mui/material/Button";
 import { FetchContext } from "../contexts/PrivateFetchContext";
+import { AuthContext } from "../contexts/AuthContext";
 
 // import EditUserProfile from "../Subpages/EditUserProfile";
 
@@ -43,16 +44,34 @@ interface PrivateInfo{
   profilepic:string | null,
 }
 
+interface userInfo{
+  username:string,
+  email:string,
+  profilepic:string,
+}
+
 const UserProfile = () => {
   const fetchcontext = useContext(FetchContext);
+  const {authState} = useContext(AuthContext);
   const [openEditProfileDialoug, setOpenEditProfileDialog] = useState<boolean>(false);
   const [userData, setUserData] = useState<PrivateInfo>({fullname:'', username:'', profilepic:''});
+  const [error, setError] = useState(null);
+  
 
 
 
   const editProfileDialogHandler=()=>{
     setOpenEditProfileDialog(!openEditProfileDialoug);
   }
+  const user= localStorage.getItem("userInfo");
+
+  const userInfo:userInfo =user ? JSON.parse(user) : '';
+
+
+  const {userProfileInfo} = fetchcontext;
+
+  const {fullname} = userProfileInfo;
+
 
   
   useEffect(()=>{
@@ -60,12 +79,19 @@ const UserProfile = () => {
     const userProfileData = async()=>{
       try{
         const {data}:any = await fetchcontext.authAxios.get('/myprofile');
+
+        const userinfo = {
+          username:data.username,
+          email:data.email,
+          profilepic:data.profilepic,
+        }
         setUserData({
           fullname: data.fullname,
           username:data.username,
           profilepic:data.email
         })
-        fetchcontext.setUserProfileInfo(data);
+        fetchcontext.setUserProfileInfo(data,userinfo);
+        console.log(data);
       }catch(e){
         console.log(e);
       }
@@ -73,15 +99,6 @@ const UserProfile = () => {
     userProfileData();
   },[]);
 
-  // const fetchDataAndShow= async()=>{
-  //   try{
-  //     const {data} = await publicFetch.get('/myprofile');
-
-  //     console.log(data);
-  //   }catch(e){
-  //     console.log(e);
-  //   }
-  // }
 
 
 
@@ -117,14 +134,14 @@ const UserProfile = () => {
               <Typography
                 sx={{ fontSize: { xs: "16px", md: "20px" }, color: "#333" }}
               >
-                {userData.fullname ? userData.fullname :userData.username}
+                {fullname ? fullname :userInfo.username}
               </Typography>
               <Typography
                 variant="subtitle1"
                 color="#757a95"
                 sx={{ fontSize: { xs: "16px", md: "14px" } }}
               >
-                @{userData.username}
+                @{userInfo.username}
               </Typography>
 
               <Button

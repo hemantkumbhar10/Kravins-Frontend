@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import axios from "axios"
-import { FetchContext } from '../../contexts/PrivateFetchContext';
-
+import { publicFetch } from '../../utils/fetch';
 
 
 interface ProfileType{
@@ -9,15 +8,21 @@ interface ProfileType{
     username:string,
     profilepic:string,
     email:string,
-    birthdate:string
+    birthdate:Date
 }
 
+let axiosConfig = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    withCredentials:true,
+  };
 
-//  const {} = useContext(FetchContext);
 
-// export async function userprofileapi ():Promise<ProfileType>{
 
-//     const response: ProfileType = await get('/')
-//     return response;
+export async function UpdateProfile (data:ProfileType):Promise<ProfileType>{
 
-// }
+    const response: ProfileType = await publicFetch.patch('/myprofile', data)
+    return response;
+
+}

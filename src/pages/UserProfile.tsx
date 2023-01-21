@@ -18,6 +18,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import EditUserProfile from "../Subpages/EditUserProfile";
 import AvatarUpload from "../components/AvatarUpload";
 import { publicFetch } from "../utils/fetch";
+import { useUserProfile } from "../services/protected/useUserProfile.api";
 
 const MyNavLink = React.forwardRef<any, any>((props, ref) => (
   <NavLink
@@ -52,10 +53,13 @@ interface userInfo{
 
 const UserProfile = () => {
   const fetchcontext = useContext(FetchContext);
-  const {authState} = useContext(AuthContext);
+  const {authState, updateAuthInfo} = useContext(AuthContext);
   const [openEditProfileDialoug, setOpenEditProfileDialog] = useState<boolean>(false);
   const [userData, setUserData] = useState<PrivateInfo>({fullname:'', username:'', profilepic:''});
   const [error, setError] = useState(null);
+
+  const {getprofile} = useUserProfile();
+
   
 
 
@@ -68,9 +72,9 @@ const UserProfile = () => {
   const userInfo:userInfo =user ? JSON.parse(user) : '';
 
 
-  const {userProfileInfo} = fetchcontext;
+  // const {userProfileInfo} = fetchcontext;
 
-  const {fullname} = userProfileInfo;
+  // const {fullname} = userProfileInfo;
 
 
   
@@ -78,19 +82,19 @@ const UserProfile = () => {
     console.log('fetching data.....')
     const userProfileData = async()=>{
       try{
-        const {data}:any = await fetchcontext.authAxios.get('/myprofile');
+        const {data}:any = await publicFetch.get('/myprofile');
 
         const userinfo = {
           username:data.username,
           email:data.email,
           profilepic:data.profilepic,
+          fullname:data.fullname,
+          birthdate:data.birthdate,
         }
-        setUserData({
-          fullname: data.fullname,
-          username:data.username,
-          profilepic:data.email
-        })
-        fetchcontext.setUserProfileInfo(data,userinfo);
+
+        updateAuthInfo(userinfo);
+
+        // fetchcontext.setUserProfileInfo(data,userinfo);
         console.log(data);
       }catch(e){
         console.log(e);
@@ -134,14 +138,14 @@ const UserProfile = () => {
               <Typography
                 sx={{ fontSize: { xs: "16px", md: "20px" }, color: "#333" }}
               >
-                {fullname ? fullname :userInfo.username}
+                {authState.userInfo.fullname ? authState.userInfo.fullname :authState.userInfo.username}
               </Typography>
               <Typography
                 variant="subtitle1"
                 color="#757a95"
                 sx={{ fontSize: { xs: "16px", md: "14px" } }}
               >
-                @{userInfo.username}
+                @{authState.userInfo.username}
               </Typography>
 
               <Button

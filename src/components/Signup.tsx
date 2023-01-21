@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import useInput from "../hooks/use-intput";
 
 import { AuthContext } from "../contexts/AuthContext";
-import { signUp } from "../services/Sessions.api";
+import {useSessions} from "../services/useSessions.api";
 
 import {
   Box,
@@ -42,6 +42,7 @@ const Signup = () => {
   const [verificationQuestion, setVerificationQuestion] = useState("What city you were born in?");
   const [navigateOnLogin, setNavigateOnLogin] = useState<boolean>(false);
   const [signUpError, setSignUpError] = useState('');
+  const {signUp} = useSessions();
 
 
   // const { register, loading, error } = useAuth();

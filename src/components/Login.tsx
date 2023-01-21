@@ -1,4 +1,4 @@
-import React, {useState, useContext, FormEvent} from 'react';
+import React, {useState, useContext, FormEvent,} from 'react';
 
 import useInput from "../hooks/use-intput";
 
@@ -9,7 +9,9 @@ import Link from "@mui/material/Link";
 
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
-import { login } from "../services/Sessions.api";
+import { useSessions } from "../services/useSessions.api";
+import { FetchContext } from '../contexts/PrivateFetchContext';
+
 
 import Button from "./Button";
 
@@ -35,9 +37,13 @@ const isPassword = (value: string) => value.match(passwordFormat);
 const Login = () => {
 
   const authContext = useContext(AuthContext);
+  const fetchContext = useContext(FetchContext);
+  const {login} = useSessions();
   const [loginError, setLoginError] = useState<string | undefined>('');
   const [navigateOnLogin, setNavigateOnLogin] = useState<boolean>(false);
  
+
+  const {privateAxios} = fetchContext;
 
   const {
     value: emailValue,
@@ -75,7 +81,7 @@ const Login = () => {
     }
 
     try{
-      const {data}:any = await login(login_data);
+      const {data}:any = await  login(login_data);
       authContext.setAuthState(data);
 
       setNavigateOnLogin(true);

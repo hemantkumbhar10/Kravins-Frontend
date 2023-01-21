@@ -25,7 +25,7 @@ import ImageButtonBases from "../components/commons/ImageButtonBases";
 
 import { AuthContext } from "../contexts/AuthContext";
 import { FetchContext } from "../contexts/PrivateFetchContext";
-import { UpdateProfile } from "../services/protected/UserProfile.api";
+import { useUserProfile } from "../services/protected/useUserProfile.api";
 
 /**
  *
@@ -72,7 +72,8 @@ const EditUserProfile = ({ open, close }: DProps) => {
   const authContext =  useContext(AuthContext);
   const fetchContext =  useContext(FetchContext);
   const {authState} = authContext;
-  const {userProfileInfo} = fetchContext;
+  const {updateprofile} = useUserProfile();
+  // const {userProfileInfo} = fetchContext;
   const [date, setDate] = useState(new Date());
   const [openAvatarUploader, setOpenAvatarUploader] = useState(false);
   const [isClickedImage, setIsClickedImage] = useState(false);
@@ -84,9 +85,9 @@ const EditUserProfile = ({ open, close }: DProps) => {
   // },[])
 
 
-  const fullname = userProfileInfo.fullname ? userProfileInfo.fullname : ''
+  // const fullname = userProfileInfo.fullname ? userProfileInfo.fullname : ''
 
-
+  const fullname = 'Detective Mangaloo'
 
   const {
     value: fullNameValue,
@@ -160,7 +161,7 @@ const EditUserProfile = ({ open, close }: DProps) => {
 
     try{
 
-      const data = await UpdateProfile(userdata)
+      const data = await updateprofile(userdata);
       console.log(data);
     }catch(e){
       console.log(e);

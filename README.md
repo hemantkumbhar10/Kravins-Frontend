@@ -64,6 +64,12 @@ Root: **`http://localhost:3000/`**
 
 *
 
+cookie prompt:
+
+**"Our website uses cookies to enhance your browsing experience and for security purposes. These cookies include those used for CSRF protection and authentication. These cookies allow us to provide a secure and personalized experience for our users. By continuing to use our website, you consent to our use of cookies. If you would like to manage or disable cookies, you can do so in your browser settings. For more information, please visit our Privacy Policy."**
+
+**Create a business email named kravins**
+
 
 
 

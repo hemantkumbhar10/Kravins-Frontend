@@ -1,55 +1,38 @@
-// import React, { createContext, useEffect, useContext, ReactNode } from "react";
-// import { AuthContext } from "../context/AuthContext";
-// import axios from "axios";
-
+import React, { createContext, useEffect, useContext, ReactNode } from "react";
 import axios, { AxiosInstance } from "axios";
-import React, { useState, useEffect, createContext, ReactNode } from "react";
 
-type privateUserInfo = {
-  fullname:string,
-}
 
 interface FetchContextProps {
-  authAxios: any;
-  userProfileInfo:privateUserInfo,
-  setUserProfileInfo:(data:privateUserInfo,userinfo:userInfo)=>void,
+ privateAxios: AxiosInstance;
 
 }
-
-type userInfo = {}
 
 const FetchContext = createContext<FetchContextProps>({} as FetchContextProps);
 const { Provider } = FetchContext;
 
 const FetchProvider = ({ children }: { children: ReactNode }) => {
-  const [userProfileInfo, setUserProfileInfo] = useState<
-  privateUserInfo
-  >({} as privateUserInfo);
 
-  const authAxios = axios.create({
+  const privateAxios = axios.create({
     baseURL: process.env.REACT_APP_API_URL,
     withCredentials: true,
   });
 
-  //   useEffect(() => {
-  //     // const getCsrfToken = async () => {
-  //     //   const { data } = await authAxios.get("/api/csrf-prot");
-  //       authAxios.defaults.headers["X-CSRF-Token"] = ''
-  //     // };
-  //     // getCsrfToken();
-  //   }, []);
+  useEffect(()=>{
+    const getCSRFToken = async()=>{
+      const {data} = await privateAxios.get('/csrf-token');
+      privateAxios.defaults.headers['X-CSRF-Token'] = data.csrfToken;
+      console.log(data)
+    };
+    getCSRFToken();
+  },[]) ;
 
-  const setPrivateProfileInfo =(data:privateUserInfo, userinfo:userInfo)=>{
-    localStorage.setItem("userInfo", JSON.stringify(userinfo));
-    setUserProfileInfo(data);
-  }
+
+
 
   const privateValues = {
-    authAxios,
-    userProfileInfo,
-    setUserProfileInfo:(data:privateUserInfo,userinfo:userInfo)=>setPrivateProfileInfo(data,userinfo),
-    
+    privateAxios,
   }
+
   return (
     <Provider
       value={privateValues}

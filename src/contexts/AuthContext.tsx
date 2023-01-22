@@ -1,4 +1,4 @@
-import React, { useState, createContext, ReactNode } from "react";
+import React, { useState, createContext, useEffect, ReactNode, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface UserInfoType {
@@ -33,9 +33,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate();
 
   //Best to put these in useEffect
-  const userInfo = localStorage.getItem("userInfo");
+  var userInfo = localStorage.getItem("userInfo");
   const expiresAtValue = localStorage.getItem("expiresAt");
-  const expiresAt = expiresAtValue ? parseInt(expiresAtValue) : null;
+  var expiresAt = expiresAtValue ? parseInt(expiresAtValue) : null;
 
   const [authState, setAuthState] = useState<authStateType>({
     token: null,
@@ -43,11 +43,24 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     userInfo: userInfo ? JSON.parse(userInfo) : {},
   });
 
-  const setAuthInfo = ({ token, userInfo, expiresAt }: authStateType) => {
+  // useEffect(()=>{
+  //   userInfo = localStorage.getItem("userInfo");
+  //   const expiresAtValue = localStorage.getItem("expiresAt");
+  //   expiresAt = expiresAtValue ? parseInt(expiresAtValue) : null;
+  // },[ userInfo, expiresAt])
+
+  // const userInfoCallback = useCallback(() => authState.userInfo, [authState]);
+  // const [userInfo, setUserInfo] = useState(userInfoCallback);
+
+
+  const setAuthInfo = useCallback(({ token, userInfo, expiresAt }: authStateType) => {
     localStorage.setItem("userInfo", JSON.stringify(userInfo));
     localStorage.setItem("expiresAt", JSON.stringify(expiresAt));
     setAuthState({ token, userInfo, expiresAt });
-  };
+    // console.log('From login....', token, expiresAt, userInfo)
+  },[authState])
+
+  // console.log('from global context...', authState);
 
   const updateAuthInfo = (userInfo: UserInfoType) => {
     const storageInfo = {
@@ -55,9 +68,14 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
       profilepic: userInfo.profilepic,
       email: userInfo.email,
     };
-
+    
+    // console.log(storageInfo);
     localStorage.setItem("userInfo", JSON.stringify(storageInfo));
-    setAuthState({ ...authState, userInfo });
+    setAuthState((prevAuthstate)=>{
+      // console.log('from update state...', prevAuthstate);
+      return {...prevAuthstate,userInfo}
+    });
+    // console.log('From update profile request',userInfo );
   };
 
   const logout = () => {

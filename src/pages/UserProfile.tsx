@@ -80,6 +80,7 @@ const UserProfile = () => {
   
   useEffect(()=>{
     console.log('fetching data.....')
+    if(!authState.userInfo){
     const userProfileData = async()=>{
       try{
         const {data}:any = await publicFetch.get('/myprofile');
@@ -93,7 +94,7 @@ const UserProfile = () => {
         }
 
         updateAuthInfo(userinfo);
-
+        console.log('From userprofile...',userinfo)
         // fetchcontext.setUserProfileInfo(data,userinfo);
         console.log(data);
       }catch(e){
@@ -101,6 +102,7 @@ const UserProfile = () => {
       }
     }
     userProfileData();
+  }
   },[]);
 
 

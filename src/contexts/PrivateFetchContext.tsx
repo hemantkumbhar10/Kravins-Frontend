@@ -21,7 +21,7 @@ const FetchProvider = ({ children }: { children: ReactNode }) => {
     const getCSRFToken = async()=>{
       const {data} = await privateAxios.get('/csrf-token');
       privateAxios.defaults.headers['X-CSRF-Token'] = data.csrfToken;
-      console.log(data)
+      // console.log(data)
     };
     getCSRFToken();
   },[]) ;

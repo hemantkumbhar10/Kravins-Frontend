@@ -65,7 +65,7 @@ const Transition = React.forwardRef(function Transition(
 const AvatarUpload =({close, open}:AvatarUploadProps)=>{
   const [image, setImage] = useState<string>(userImage);
   const editorRef = useRef<AvatarEditor>(null);
-  const [imageURL, setImageURL] = useState<string | null>(null);
+  const [imageURL, setImageURL] = useState<string |ArrayBuffer| null>(null);
   const [scale, setScale] = useState<number>(1);
   const [rotate, setRotate] = useState<number>(0);
 
@@ -85,18 +85,47 @@ const AvatarUpload =({close, open}:AvatarUploadProps)=>{
   }
 
 
+
+
+ 
+  // const onClickSave =() => {
+  //   if (editorRef.current) {
+  //     const canvasref = editorRef.current.getImage();
+  //     const canvas = editorRef.current.getImage().toDataURL()
+  //     canvasref.style.touchAction='none';
+  //    fetch(canvas)
+  //       .then(res => res.blob())
+  //       .then(blob => setImageURL((prev)=>{
+  //         return window.URL.createObjectURL(blob);
+  //       }));
+  //   }
+  // }
+
   const onClickSave = () => {
     if (editorRef.current) {
-      const canvasref = editorRef.current.getImage();
-      const canvas = editorRef.current.getImage().toDataURL();
-      canvasref.style.touchAction='none';
-      fetch(canvas)
-        .then(res => res.blob())
-        .then(blob => setImageURL(window.URL.createObjectURL(blob)));
-    }
-    close();
-  }
+        const canvas = editorRef.current.getImage();
+        if (canvas.toBlob) {
+            canvas.toBlob((blob:Blob | null) => {
+              if(blob){
+                setImageURL(window.URL.createObjectURL(blob));
+              }
+            }, "image/jpeg");
+        } else {
+            const dataURL = canvas.toDataURL();
+            fetch(dataURL)
+                .then(res => res.blob())
+                .then(blob => {
+                    const fileReader = new FileReader();
+                    fileReader.onload = () => {
+                      setImageURL(fileReader.result);
+                      }
+                      fileReader.readAsDataURL(blob);
+                      });
+                      }
+                      }
+                      };
 
+  console.log(imageURL)
 
 
     return(
@@ -114,7 +143,6 @@ const AvatarUpload =({close, open}:AvatarUploadProps)=>{
         rotate={rotate}
         borderRadius={200}
       />
-
             <Box sx={{width:'100%',display:'flex', justifyContent:'space-between'}}>
          <Button variant="outlined" component="label" color='blue' sx={{boxShadow:'none'}}>
           Select Image

@@ -128,7 +128,7 @@ const TopNavBar = () => {
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     alt="Remy Sharp"
-                    src="/static/images/avatar/2.jpg"
+                    src=""
                     sx={{ width: 46, height: 46 }}
                   />
                 </IconButton>

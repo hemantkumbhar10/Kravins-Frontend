@@ -71,10 +71,11 @@ const EditUserProfile = ({ open, close }: DProps) => {
 
   const authContext =  useContext(AuthContext);
   const fetchContext =  useContext(FetchContext);
-  const {authState} = authContext;
+  const {authState,updateAuthInfo} = authContext;
   const {updateprofile} = useUserProfile();
   // const {userProfileInfo} = fetchContext;
-  const [date, setDate] = useState(new Date());
+  const date_string = authState.userInfo.birthdate ? authState.userInfo.birthdate : "2000-01-01T18:30:00.000Z"
+  const [date, setDate] = useState(new Date(date_string));
   const [openAvatarUploader, setOpenAvatarUploader] = useState(false);
   const [isClickedImage, setIsClickedImage] = useState(false);
 
@@ -87,7 +88,8 @@ const EditUserProfile = ({ open, close }: DProps) => {
 
   // const fullname = userProfileInfo.fullname ? userProfileInfo.fullname : ''
 
-  const fullname = 'Detective Mangaloo'
+
+  // console.log('From edit user profile...',authState)
 
   const {
     value: fullNameValue,
@@ -96,7 +98,7 @@ const EditUserProfile = ({ open, close }: DProps) => {
     valueChangeHandler: fullNameChangeHandler,
     inputBlurHandler: fullNameBlurHandler,
     reset: resetFullNameInput,
-  } = useFormInput(fullNameWithinLimmit,fullname);
+  } = useFormInput(fullNameWithinLimmit,authState.userInfo.fullname!);
 
   const {
     value: usernameValue,
@@ -142,7 +144,7 @@ const EditUserProfile = ({ open, close }: DProps) => {
     ) {
       return;
     }
-    console.log(usernameValue, emailValue, date);
+    // console.log(usernameValue, emailValue, date);
     // fullname:string,
     // username:string,
     // profilepic:string,
@@ -158,17 +160,23 @@ const EditUserProfile = ({ open, close }: DProps) => {
 
     }
 
-
+  
     try{
 
-      const data = await updateprofile(userdata);
-      console.log(data);
+      const {data}:any = await updateprofile(userdata);
+      // console.log(data)
+      const userinfo = {
+        fullname:data.fullname,
+        username:data.username,
+        email:data.email,
+        profilepic:data.profilepic,
+        birthdate:data.birthdate
+      }
+      // console.log(userinfo);
+      await updateAuthInfo(userinfo)
     }catch(e){
       console.log(e);
     }
-    resetFullNameInput();
-    resetUsernameInput();
-    resetEmailInput();
   };
 
 

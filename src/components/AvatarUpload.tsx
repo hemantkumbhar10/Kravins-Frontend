@@ -20,6 +20,8 @@ import {
   IconButton,
 } from "@mui/material";
 import { dataUrlToFile } from "../helpers/urlToFile";
+import axios from "axios";
+import { useUserProfile } from "../services/protected/useUserProfile.api";
 
 interface AvatarUploadProps {
   close: () => void;
@@ -81,6 +83,8 @@ const AvatarUpload = ({ close, open }: AvatarUploadProps) =>{
   const [scale, setScale] = useState<number>(1);
   const [rotate, setRotate] = useState<number>(0);
 
+  const {postAvatar} = useUserProfile();
+
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.currentTarget.files) return;
     setImage(URL.createObjectURL(event.currentTarget.files[0]));
@@ -94,7 +98,7 @@ const AvatarUpload = ({ close, open }: AvatarUploadProps) =>{
     setRotate(rotate + 90);
   };
 
-  const onClickSave =() => {
+  const onClickSave = async() => {
     if (editorRef.current) {
       const canvasref = editorRef.current.getImage();
       const canvasurl = editorRef.current.getImage().toDataURL()
@@ -103,40 +107,18 @@ const AvatarUpload = ({ close, open }: AvatarUploadProps) =>{
       const file = dataUrlToFile(canvasurl, 'userAvatar.png');
 
       console.log('herees the file: ',file);
-    //  fetch(canvas)
-    //     .then(res => res.blob())
-    //     .then(blob => setImageURL((prev)=>{
-    //       return window.URL.createObjectURL(blob);
-    //     }));
-    // }
+      const formdata = new FormData();
+      formdata.append('image',file);
+
+      try{
+        const res = await postAvatar(formdata);
+        console.log(res);
+      }catch(e){
+        console.log(e);
+      }
   }
 }
 
-  // const onClickSave = () => {
-  //   if (editorRef.current) {
-  //     const canvas = editorRef.current.getImage();
-  //     if (canvas.toBlob) {
-  //       canvas.toBlob((blob: Blob | null) => {
-  //         if (blob) {
-  //           setImageURL(window.URL.createObjectURL(blob));
-  //         }
-  //       }, "image/jpeg");
-  //     } else {
-  //       const dataURL = canvas.toDataURL();
-  //       fetch(dataURL)
-  //         .then((res) => res.blob())
-  //         .then((blob) => {
-  //           const fileReader = new FileReader();
-  //           fileReader.onload = () => {
-  //             setImageURL(fileReader.result);
-  //           };
-  //           fileReader.readAsDataURL(blob);
-  //         });
-  //     }
-  //   }
-  // };
-
-  // console.log(imageURL);
 
   return (
     <Dialog

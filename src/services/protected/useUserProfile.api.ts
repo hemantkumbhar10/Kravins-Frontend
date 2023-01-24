@@ -12,6 +12,7 @@ interface ProfileType {
 interface userProfileHookType {
   getprofile: () => Promise<ProfileType>;
   updateprofile: (data: ProfileType) => Promise<ProfileType>;
+  postAvatar: (data: any) => Promise<any>;
 }
 
 const useUserProfile = (): userProfileHookType => {
@@ -27,9 +28,16 @@ const useUserProfile = (): userProfileHookType => {
     return response;
   }
 
+
+  async function postAvatar(data: any): Promise<any> {
+    const response: any = await privateAxios.post("/uploadavatar", data);
+    return response;
+  }
+
   return {
     getprofile,
     updateprofile,
+    postAvatar,
   };
 };
 

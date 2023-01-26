@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState,useEffect } from "react";
 import { TransitionProps } from "@mui/material/transitions";
 import Slide from "@mui/material/Slide";
 import AvatarEditor from "react-avatar-editor";
@@ -6,6 +6,7 @@ import userImage from "../assets/jhondoe.png";
 import classes from "./styles/AvatarUpload.module.css";
 import CropRotateIcon from "@mui/icons-material/CropRotate";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import { useNavigate } from "react-router-dom";
 
 import {
   Box,
@@ -18,6 +19,7 @@ import {
   Typography,
   styled,
   IconButton,
+  Backdrop, CircularProgress,
 } from "@mui/material";
 import { dataUrlToFile } from "../helpers/urlToFile";
 import axios from "axios";
@@ -26,6 +28,7 @@ import { useUserProfile } from "../services/protected/useUserProfile.api";
 interface AvatarUploadProps {
   close: () => void;
   open: boolean;
+  imageChange:()=>void
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -79,9 +82,10 @@ const ImageActionSlider = styled(Slider)({
 const AvatarUpload = ({ close, open }: AvatarUploadProps) =>{
   const [image, setImage] = useState<string>(userImage);
   const editorRef = useRef<AvatarEditor>(null);
-  const [imageURL, setImageURL] = useState<string | ArrayBuffer | null>(null);
   const [scale, setScale] = useState<number>(1);
   const [rotate, setRotate] = useState<number>(0);
+  const [showLoader, setShowLoader] = useState(false);
+   const navigate = useNavigate();
 
   const {postAvatar} = useUserProfile();
 
@@ -99,6 +103,7 @@ const AvatarUpload = ({ close, open }: AvatarUploadProps) =>{
   };
 
   const onClickSave = async() => {
+    setShowLoader(true);
     if (editorRef.current) {
       const canvasref = editorRef.current.getImage();
       const canvasurl = editorRef.current.getImage().toDataURL()
@@ -113,6 +118,9 @@ const AvatarUpload = ({ close, open }: AvatarUploadProps) =>{
       try{
         const res = await postAvatar(formdata);
         console.log(res);
+        setShowLoader(false);
+        // setImageChanged(!imageChanged);
+        navigate('/home/myprofile');
       }catch(e){
         console.log(e);
       }
@@ -120,13 +128,25 @@ const AvatarUpload = ({ close, open }: AvatarUploadProps) =>{
 }
 
 
+const backdrop =
+  <Backdrop
+    sx={{ color: '#fff', zIndex: 999999 }}
+    open={showLoader}
+  >
+    <CircularProgress color="inherit" />
+  </Backdrop>
+
+
   return (
+    <>
     <Dialog
+    
       TransitionComponent={Transition}
       open={open}
       aria-label="Profile picture upload"
       sx={{ zIndex: 999999 }}
     >
+      {backdrop}
       <Box
         sx={{
           width: "auto",
@@ -212,6 +232,7 @@ const AvatarUpload = ({ close, open }: AvatarUploadProps) =>{
         </Stack>
       </Box>
     </Dialog>
+    </>
   );
 }
 

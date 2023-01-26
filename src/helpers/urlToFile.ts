@@ -4,7 +4,9 @@
 const dataUrlToFile = (url:string,filename:string)=>{
     const [mediaType,data] = url.split(",");
 
-    const mime = mediaType.match(/:(.*?);/)?.[0];
+    // console.log('this is data..', data)
+
+    const mime = mediaType.match(/:(.*?);/)?.[1];
 
     console.log('This is mime...', mime);
 

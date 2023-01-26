@@ -38,6 +38,7 @@ import { useUserProfile } from "../services/protected/useUserProfile.api";
 interface DProps {
   open: boolean;
   close: () => void;
+  imageChange:()=>void
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -67,29 +68,15 @@ const isWithinLimmit = (value: string) =>
 const isEmail = (value: string) => value.match(mailFormat);
 
 
-const EditUserProfile = ({ open, close }: DProps) => {
+const EditUserProfile = ({ open, close,imageChange }: DProps) => {
 
   const authContext =  useContext(AuthContext);
-  const fetchContext =  useContext(FetchContext);
   const {authState,updateAuthInfo} = authContext;
   const {updateprofile} = useUserProfile();
-  // const {userProfileInfo} = fetchContext;
   const date_string = authState.userInfo.birthdate ? authState.userInfo.birthdate : "2000-01-01T18:30:00.000Z"
   const [date, setDate] = useState(new Date(date_string));
   const [openAvatarUploader, setOpenAvatarUploader] = useState(false);
-  const [isClickedImage, setIsClickedImage] = useState(false);
 
-
-  // useEffect(()=>{
-  //   // setDate(date=>(authState.userInfo.birthdate))
-
-  // },[])
-
-
-  // const fullname = userProfileInfo.fullname ? userProfileInfo.fullname : ''
-
-
-  // console.log('From edit user profile...',authState)
 
   const {
     value: fullNameValue,
@@ -164,7 +151,6 @@ const EditUserProfile = ({ open, close }: DProps) => {
     try{
 
       const {data}:any = await updateprofile(userdata);
-      // console.log(data)
       const userinfo = {
         fullname:data.fullname,
         username:data.username,
@@ -172,7 +158,6 @@ const EditUserProfile = ({ open, close }: DProps) => {
         profilepic:data.profilepic,
         birthdate:data.birthdate
       }
-      // console.log(userinfo);
       await updateAuthInfo(userinfo)
     }catch(e){
       console.log(e);
@@ -345,7 +330,7 @@ const EditUserProfile = ({ open, close }: DProps) => {
         </Stack>
       </Paper>
     </Dialog>
-    <AvatarUpload close={closeAvatarUploader} open={openAvatarUploader}/>
+    <AvatarUpload imageChange={imageChange} close={closeAvatarUploader} open={openAvatarUploader}/>
    </>
   );
 };

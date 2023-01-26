@@ -3,7 +3,7 @@
 
 declare module '@emoji-mart/react';
 
-
+declare module 'blueimp-canvas-to-blob';
 
 interface UserType {
     username?:string,

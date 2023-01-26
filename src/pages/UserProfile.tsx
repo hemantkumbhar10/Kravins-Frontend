@@ -2,7 +2,7 @@ import React, {useState, useContext, useEffect} from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
-import { Grid, styled } from "@mui/material";
+import {  Grid, styled } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack/Stack";
 import Button from "@mui/material/Button";
@@ -57,24 +57,19 @@ const UserProfile = () => {
   const [openEditProfileDialoug, setOpenEditProfileDialog] = useState<boolean>(false);
   const [userData, setUserData] = useState<PrivateInfo>({fullname:'', username:'', profilepic:''});
   const [error, setError] = useState(null);
+  const [imageChanged, setImageChanged] = useState<boolean>(false);
 
-  const {getprofile} = useUserProfile();
 
   
-
+ const isImageChanged = ()=>{
+  setImageChanged(!imageChanged);
+ }
 
 
   const editProfileDialogHandler=()=>{
     setOpenEditProfileDialog(!openEditProfileDialoug);
   }
-  const user= localStorage.getItem("userInfo");
 
-  const userInfo:userInfo =user ? JSON.parse(user) : '';
-
-
-  // const {userProfileInfo} = fetchcontext;
-
-  // const {fullname} = userProfileInfo;
 
 
   
@@ -94,17 +89,17 @@ const UserProfile = () => {
         }
 
         updateAuthInfo(userinfo);
-        console.log('From userprofile...',userinfo)
-        // fetchcontext.setUserProfileInfo(data,userinfo);
-        console.log(data);
       }catch(e){
         console.log(e);
       }
     }
     userProfileData();
   }
-  },[]);
+  },[imageChanged]);
 
+
+
+  
 
 
 
@@ -127,7 +122,7 @@ const UserProfile = () => {
         <Grid container ml={2}>
           <Grid item xs={12} sm={6} md={6} display="flex" flexDirection="row">
             <ImageStyled
-              src={userImage}
+              src={authState.userInfo.profilepic ? authState.userInfo.profilepic :userImage}
               alt="user"
               sx={{
                 mt: -1,
@@ -303,7 +298,7 @@ const UserProfile = () => {
           <Box sx={{height:{xs:'450px',sm:'300px'}}}></Box>
         </Box>
       </Container>
-      <EditUserProfile close={editProfileDialogHandler} open={openEditProfileDialoug}/>
+      <EditUserProfile close={editProfileDialogHandler} open={openEditProfileDialoug} imageChange={isImageChanged}/>
     </Box>
     
     </>

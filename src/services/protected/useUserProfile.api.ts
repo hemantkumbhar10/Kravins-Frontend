@@ -4,7 +4,7 @@ import { FetchContext } from "../../contexts/PrivateFetchContext";
 interface ProfileType {
   fullname: string;
   username: string;
-  profilepic: string;
+  profilepic?: string;
   email: string;
   birthdate: Date;
 }

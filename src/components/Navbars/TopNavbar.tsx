@@ -26,7 +26,7 @@ import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 
 const TopNavBar = () => {
-  const { isAuthenticated, logout } = useContext(AuthContext);
+  const { isAuthenticated, logout, authState } = useContext(AuthContext);
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -128,7 +128,7 @@ const TopNavBar = () => {
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     alt="Remy Sharp"
-                    src=""
+                    src={authState.userInfo.profilepic? authState.userInfo.profilepic : ''}
                     sx={{ width: 46, height: 46 }}
                   />
                 </IconButton>

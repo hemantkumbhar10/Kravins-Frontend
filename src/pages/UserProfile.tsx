@@ -1,24 +1,12 @@
 import React, {useState, useContext, useEffect} from "react";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import {  Grid, styled } from "@mui/material";
-import Paper from "@mui/material/Paper";
-import Stack from "@mui/material/Stack/Stack";
-import Button from "@mui/material/Button";
+import {  Grid, styled,Paper,Box,Button,Typography,Stack,Container } from "@mui/material";
 import { FetchContext } from "../contexts/PrivateFetchContext";
 import { AuthContext } from "../contexts/AuthContext";
-
-// import EditUserProfile from "../Subpages/EditUserProfile";
-
-import userImage from "../assets/salat.png";
 
 import classes from "./styles/UserProfile.module.css";
 import { NavLink, Outlet } from "react-router-dom";
 import EditUserProfile from "../Subpages/EditUserProfile";
-import AvatarUpload from "../components/AvatarUpload";
 import { publicFetch } from "../utils/fetch";
-import { useUserProfile } from "../services/protected/useUserProfile.api";
 
 const MyNavLink = React.forwardRef<any, any>((props, ref) => (
   <NavLink
@@ -45,37 +33,23 @@ interface PrivateInfo{
   profilepic:string | null,
 }
 
-interface userInfo{
-  username:string,
-  email:string,
-  profilepic:string,
-}
-
 const UserProfile = () => {
-  const fetchcontext = useContext(FetchContext);
   const {authState, updateAuthInfo} = useContext(AuthContext);
   const [openEditProfileDialoug, setOpenEditProfileDialog] = useState<boolean>(false);
-  const [userData, setUserData] = useState<PrivateInfo>({fullname:'', username:'', profilepic:''});
   const [error, setError] = useState(null);
-  const [imageChanged, setImageChanged] = useState<boolean>(false);
-
 
   
- const isImageChanged = ()=>{
-  setImageChanged(!imageChanged);
- }
-
-
   const editProfileDialogHandler=()=>{
     setOpenEditProfileDialog(!openEditProfileDialoug);
   }
 
 
 
+
+
   
   useEffect(()=>{
-    console.log('fetching data.....')
-    if(!authState.userInfo){
+    // console.log('fetching data.....')
     const userProfileData = async()=>{
       try{
         const {data}:any = await publicFetch.get('/myprofile');
@@ -87,20 +61,14 @@ const UserProfile = () => {
           fullname:data.fullname,
           birthdate:data.birthdate,
         }
-
-        updateAuthInfo(userinfo);
+        updateAuthInfo(userinfo)
       }catch(e){
         console.log(e);
       }
     }
     userProfileData();
-  }
-  },[imageChanged]);
-
-
-
   
-
+  },[]);
 
 
 
@@ -122,7 +90,7 @@ const UserProfile = () => {
         <Grid container ml={2}>
           <Grid item xs={12} sm={6} md={6} display="flex" flexDirection="row">
             <ImageStyled
-              src={authState.userInfo.profilepic ? authState.userInfo.profilepic :userImage}
+              src={authState.userInfo.profilepic ? authState.userInfo.profilepic :''}
               alt="user"
               sx={{
                 mt: -1,
@@ -298,7 +266,7 @@ const UserProfile = () => {
           <Box sx={{height:{xs:'450px',sm:'300px'}}}></Box>
         </Box>
       </Container>
-      <EditUserProfile close={editProfileDialogHandler} open={openEditProfileDialoug} imageChange={isImageChanged}/>
+      <EditUserProfile close={editProfileDialogHandler} open={openEditProfileDialoug}/>
     </Box>
     
     </>

@@ -1,4 +1,4 @@
-import React, { useRef, useState,useEffect } from "react";
+import React, { useRef, useState,useContext } from "react";
 import { TransitionProps } from "@mui/material/transitions";
 import Slide from "@mui/material/Slide";
 import AvatarEditor from "react-avatar-editor";
@@ -6,14 +6,12 @@ import userImage from "../assets/jhondoe.png";
 import classes from "./styles/AvatarUpload.module.css";
 import CropRotateIcon from "@mui/icons-material/CropRotate";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import { useNavigate } from "react-router-dom";
 
 import {
   Box,
   Button,
   Dialog,
   Slider,
-  SliderValueLabelProps,
   Stack,
   Tooltip,
   Typography,
@@ -22,13 +20,12 @@ import {
   Backdrop, CircularProgress,
 } from "@mui/material";
 import { dataUrlToFile } from "../helpers/urlToFile";
-import axios from "axios";
 import { useUserProfile } from "../services/protected/useUserProfile.api";
+import { AuthContext } from "../contexts/AuthContext";
 
 interface AvatarUploadProps {
   close: () => void;
   open: boolean;
-  imageChange:()=>void
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -79,13 +76,15 @@ const ImageActionSlider = styled(Slider)({
   },
 });
 
-const AvatarUpload = ({ close, open }: AvatarUploadProps) =>{
+const AvatarUpload = ({ close, open,}: AvatarUploadProps) =>{
   const [image, setImage] = useState<string>(userImage);
   const editorRef = useRef<AvatarEditor>(null);
   const [scale, setScale] = useState<number>(1);
   const [rotate, setRotate] = useState<number>(0);
   const [showLoader, setShowLoader] = useState(false);
-   const navigate = useNavigate();
+  const {updateProfilePic} = useContext(AuthContext);
+
+
 
   const {postAvatar} = useUserProfile();
 
@@ -117,15 +116,18 @@ const AvatarUpload = ({ close, open }: AvatarUploadProps) =>{
 
       try{
         const res = await postAvatar(formdata);
-        console.log(res);
-        setShowLoader(false);
-        // setImageChanged(!imageChanged);
-        navigate('/home/myprofile');
+        updateProfilePic(res.data);
+        if(res.data){
+          setShowLoader(false);
+          close();
+        }
       }catch(e){
         console.log(e);
       }
   }
 }
+
+
 
 
 const backdrop =
@@ -135,6 +137,7 @@ const backdrop =
   >
     <CircularProgress color="inherit" />
   </Backdrop>
+
 
 
   return (

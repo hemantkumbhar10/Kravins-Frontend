@@ -1,44 +1,19 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import DatePicker from "react-date-picker";
-
-import useInput from "../hooks/use-intput";
-
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import { Box } from "@mui/system";
-import { Stack, styled } from "@mui/material";
-import Button from "@mui/material/Button";
-
-import { Dialog, DialogActions } from "@mui/material";
-import TextField from "@mui/material/TextField";
+import { Stack, Grid,Paper,Typography,Box,Button,Dialog,TextField,Slide } from "@mui/material";
 import { TransitionProps } from "@mui/material/transitions";
-import Slide from "@mui/material/Slide";
 import AvatarUpload from "../components/AvatarUpload";
-
 import { useFormInput } from "../hooks/use-formInput";
-
-import userImage from "../assets/salat.png";
-
 import classes from "./styles/EditUserProfile.module.css";
 import ImageButtonBases from "../components/commons/ImageButtonBases";
 
 import { AuthContext } from "../contexts/AuthContext";
-import { FetchContext } from "../contexts/PrivateFetchContext";
 import { useUserProfile } from "../services/protected/useUserProfile.api";
 
-/**
- *
- * REMEMBER TO CREATE IMAGE UPLOAD WITH PREVIEW FOR USER PROFILE PIC ;)
- *
- * CHEEEEEEEEERS!!
- *
- */
 
 interface DProps {
   open: boolean;
   close: () => void;
-  imageChange:()=>void
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -50,11 +25,6 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const ImageStyled = styled("img")({
-  borderRadius: "50%",
-  zIndex: 1,
-  marginTop: "50px",
-});
 
 // eslint-disable-next-line
 const mailFormat: RegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -68,12 +38,13 @@ const isWithinLimmit = (value: string) =>
 const isEmail = (value: string) => value.match(mailFormat);
 
 
-const EditUserProfile = ({ open, close,imageChange }: DProps) => {
+const EditUserProfile = ({ open, close, }: DProps) => {
 
   const authContext =  useContext(AuthContext);
   const {authState,updateAuthInfo} = authContext;
   const {updateprofile} = useUserProfile();
   const date_string = authState.userInfo.birthdate ? authState.userInfo.birthdate : "2000-01-01T18:30:00.000Z"
+  const profile_pic = authState.userInfo.profilepic ? authState.userInfo.profilepic : ""
   const [date, setDate] = useState(new Date(date_string));
   const [openAvatarUploader, setOpenAvatarUploader] = useState(false);
 
@@ -131,19 +102,12 @@ const EditUserProfile = ({ open, close,imageChange }: DProps) => {
     ) {
       return;
     }
-    // console.log(usernameValue, emailValue, date);
-    // fullname:string,
-    // username:string,
-    // profilepic:string,
-    // email:string,
-    // birthdate:string
 
     const userdata = {
       fullname:fullNameValue,
       email:emailValue,
       username:usernameValue,
       birthdate:date,
-      profilepic:''
 
     }
 
@@ -204,7 +168,7 @@ const EditUserProfile = ({ open, close,imageChange }: DProps) => {
           sx={{ display: "flex", justifyContent: "center", my: 2 }}
           
         >
-        <ImageButtonBases url={userImage} title='Edit'click={closeAvatarUploader}/>
+        <ImageButtonBases url={profile_pic} title='Edit'click={closeAvatarUploader}/>
         </Box>
         <Box component="form">
           <Grid container spacing={1}>
@@ -330,105 +294,11 @@ const EditUserProfile = ({ open, close,imageChange }: DProps) => {
         </Stack>
       </Paper>
     </Dialog>
-    <AvatarUpload imageChange={imageChange} close={closeAvatarUploader} open={openAvatarUploader}/>
+    <AvatarUpload close={closeAvatarUploader} open={openAvatarUploader}/>
    </>
   );
 };
 
 export default EditUserProfile;
 
-{
-  /* <Box
-component="form"
-className={classes.user_edit_form}
->
-<Grid item xs={12} sm={6}>
-<TextField
-  label="Full Name"
-  variant="outlined"
-  fullWidth
-  margin="normal"
-  sx={{
-    "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-      padding: "12px 8px 15px 8px",
-    },
-  }}
-  onChange={fullNameChangeHandler}
-  onBlur={fullNameBlurHandler}
-  value={fullNameValue}
-  error={fullNameHasError}
-  helperText={fullNameHasError && 'Fullname is empty or too long'}
-/></Grid>
-<Grid item xs={12} sm={6}>
-<TextField
-  label="Username"
-  variant="outlined"
-  fullWidth
-  margin="normal"
-  sx={{
-    "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-      padding: "12px 8px 15px 8px",
-    },
-  }}
-  onChange={usernameChangeHandler}
-  onBlur={usernameBlurHandler}
-  error={usernameHasError}
-  value={usernameValue}
-  helperText={usernameHasError && 'Username is empty or too long'}
-/></Grid>
-<TextField
-  label="Email"
-  variant="outlined"
-  margin="normal"
-  sx={{
-    "& .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input": {
-      padding: "12px 8px 15px 8px",
-    },
-  }}
-  fullWidth
-  onChange={emailChangeHandler}
-  onBlur={emailBlurHandler}
-  value={emailValue}
-  error={emailHasError}
-  helperText={emailHasError && 'Enter valid email address'}
-></TextField>
-<div
-  style={{
-    margin: "auto 0 5px 0",
-    display: "flex",
-    flexDirection: "column",
-  }}
->
-  <Typography variant="subtitle1" color="primary">
-    Date of Birth
-  </Typography>
-  <DatePicker onChange={setDate} value={date} />
-</div>
-<Button
-  size="large"
-  variant="contained"
-  color="success"
-  sx={{ marginTop: 2 }}
-  onClick={formSubmissionHandler}
-  disabled={!formIsValid}
->
-  Update Profile
-</Button>
-</Box> */
-}
 
-{
-  /* <Stack
-direction="row"
-spacing={1}
-justifyContent="flex-end"
-marginTop={5}
->
-<Button size="small" color="error" variant="contained" onClick={close}>
-  Delete Account
-</Button>
-<Button size="small" color="warning" variant="contained" onClick={close}>
-  Change Password
-</Button>
-</Stack> */
-}

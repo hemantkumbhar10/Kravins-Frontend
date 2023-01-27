@@ -19,6 +19,7 @@ interface AuthContextType {
   isAuthenticated: () => boolean;
   setAuthState: (authInfo: authStateType) => void;
   updateAuthInfo: (userInfo: UserInfoType) => void;
+  updateProfilePic: (pic:string) => void;
   logout: () => void;
   authState: authStateType;
   loading?: boolean;
@@ -43,16 +44,6 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     userInfo: userInfo ? JSON.parse(userInfo) : {},
   });
 
-  // useEffect(()=>{
-  //   userInfo = localStorage.getItem("userInfo");
-  //   const expiresAtValue = localStorage.getItem("expiresAt");
-  //   expiresAt = expiresAtValue ? parseInt(expiresAtValue) : null;
-  // },[ userInfo, expiresAt])
-
-  // const userInfoCallback = useCallback(() => authState.userInfo, [authState]);
-  // const [userInfo, setUserInfo] = useState(userInfoCallback);
-
-
   const setAuthInfo = useCallback(({ token, userInfo, expiresAt }: authStateType) => {
     localStorage.setItem("userInfo", JSON.stringify(userInfo));
     localStorage.setItem("expiresAt", JSON.stringify(expiresAt));
@@ -60,23 +51,26 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     // console.log('From login....', token, expiresAt, userInfo)
   },[authState])
 
-  // console.log('from global context...', authState);
 
-  const updateAuthInfo = (userInfo: UserInfoType) => {
-    const storageInfo = {
-      username: userInfo.username,
-      profilepic: userInfo.profilepic,
-      email: userInfo.email,
-    };
-    
-    // console.log(storageInfo);
-    localStorage.setItem("userInfo", JSON.stringify(storageInfo));
+  const updateAuthInfo = (userInfo: UserInfoType) => {    
+    localStorage.setItem("userInfo", JSON.stringify(userInfo));
     setAuthState((prevAuthstate)=>{
       // console.log('from update state...', prevAuthstate);
       return {...prevAuthstate,userInfo}
     });
-    // console.log('From update profile request',userInfo );
   };
+
+  const updateProfilePic = (pic:string)=>{
+    var user = JSON.parse(localStorage.getItem('userInfo')!);
+    user.profilepic = pic;
+    localStorage.setItem('userInfo',JSON.stringify(user));
+
+    setAuthState((prevState)=>{
+      return {...prevState, userInfo:user};
+    });
+  }
+
+
 
   const logout = () => {
     localStorage.removeItem("userInfo");
@@ -104,6 +98,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     authState,
     setAuthState: (authInfo: authStateType) => setAuthInfo(authInfo),
     isAuthenticated,
+    updateProfilePic,
     logout,
     updateAuthInfo,
   };

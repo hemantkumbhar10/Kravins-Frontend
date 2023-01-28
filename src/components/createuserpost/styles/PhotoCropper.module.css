@@ -1,0 +1,9 @@
+
+.photo_cropper_editor{
+    height:100% !important;
+    width:100% !important;
+}
+
+.photo_cropper_editor img {
+    object-fit: fill;
+}

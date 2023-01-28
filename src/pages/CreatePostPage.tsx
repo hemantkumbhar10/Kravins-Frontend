@@ -13,7 +13,8 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
 
-import { IconButton } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
+import { useTheme } from '@mui/material/styles';
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
 import PhotoEditor from "../components/createuserpost/PhotoEditor";
@@ -50,6 +51,10 @@ const CreatePostPage = ({open,close}:DProps) => {
 
   const {width}  = useContext(viewportContext);
 
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+
   if(!width){
     return<></>
   }
@@ -68,11 +73,14 @@ const CreatePostPage = ({open,close}:DProps) => {
       <Dialog
         sx={{
           zIndex: 999999,
+          
           "& .MuiDialog-paper": {
-            margin: { xs: "0" },
-            maxHeight: { xs: "unset", md: "600px" },
-            height: { xs: "100%", md: "600px" },
-            width:{xs:'100%', md:'900px'}
+            maxWidth:'unset',
+          maxHeight:'unset'
+            // margin: { xs: "0" },
+            // maxHeight: { xs: "unset", md: "auto" },
+            // height: { xs: "100%", md: "auto" },
+            // width:{xs:'auto', }
           },
         }}
         open={open}

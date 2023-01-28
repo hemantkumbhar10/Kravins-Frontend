@@ -12,16 +12,15 @@ import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
-import AddIcon from '@mui/icons-material/Add';
 
 import { IconButton } from "@mui/material";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 
-import { Link } from "react-router-dom";
+import PhotoEditor from "../components/createuserpost/PhotoEditor";
 
 //assets
 import coffeeImage from "../assets/coffee.jpg";
-import horizontalImage from "../assets/machiato.jpg";
+// import horizontalImage from "../assets/machiato.jpg";
 
 const Img = styled("img")({
   objectFit: "contain",
@@ -58,6 +57,12 @@ const CreatePostPage = ({open,close}:DProps) => {
   const isDesktop = width < 900 ? true : false;
 
 
+   {/* coffeeImage */}
+                {/* horizontalImage */}
+                {/* <Box sx={{width:300, height:400, display:'flex', justifyContent:'center', alignItems:'center', backgroundColor:'#e7e3e3'}}>
+                    <AddIcon sx={{m:'auto'}} fontSize='large'/>
+                </Box> */}
+
   return (
     <div>
       <Dialog
@@ -65,14 +70,17 @@ const CreatePostPage = ({open,close}:DProps) => {
           zIndex: 999999,
           "& .MuiDialog-paper": {
             margin: { xs: "0" },
-            maxHeight: { xs: "unset", md: "auto" },
-            height: { xs: "100%", md: "auto" },
+            maxHeight: { xs: "unset", md: "600px" },
+            height: { xs: "100%", md: "600px" },
+            width:{xs:'100%', md:'900px'}
           },
         }}
         open={open}
         TransitionComponent={Transition}
         aria-describedby="alert-dialog-slide-description"
       >
+        <PhotoEditor/>
+        {/* <>
         <Box
           sx={{
             width: "100%",
@@ -104,11 +112,7 @@ const CreatePostPage = ({open,close}:DProps) => {
           <Grid container spacing={2}>
             <Grid item m="auto">
               <ButtonBase sx={{ maxWidth: 300, maxHeight: 400 }}>
-                {/* coffeeImage */}
-                {/* horizontalImage */}
-                {/* <Box sx={{width:300, height:400, display:'flex', justifyContent:'center', alignItems:'center', backgroundColor:'#e7e3e3'}}>
-                    <AddIcon sx={{m:'auto'}} fontSize='large'/>
-                </Box> */}
+               
                 <Img alt="complex" src={coffeeImage} />
               </ButtonBase>
             </Grid>
@@ -132,8 +136,6 @@ const CreatePostPage = ({open,close}:DProps) => {
                 </Typography>
               </Box>
               <Divider sx={{ my: 1 }}></Divider>
-
-{/*//////////////////////////////////////////// Edit in progress /////////////////////////////////////////// */}
 
               <TextField
                 id="standard-basic"
@@ -195,16 +197,11 @@ const CreatePostPage = ({open,close}:DProps) => {
                     { lineHeight: 1, left: 7, top: 5 },
                 }}
               />
-{/*//////////////////////////////////////////// Edit in progress /////////////////////////////////////////// */}
-
-
-
-
-
 
             </Grid>
           </Grid>
         </Paper>
+        </> */}
         <DialogActions>
           <Button onClick={close}>
             Cancel

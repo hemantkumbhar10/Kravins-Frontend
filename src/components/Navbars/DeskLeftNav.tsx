@@ -26,28 +26,6 @@ import CreatePostPage from "../../pages/CreatePostPage";
 
 
 
-
-  
-
-
-
-const MyNavLink = React.forwardRef<any, any>((props, ref) => (
-  <NavLink
-    ref={ref}
-    to={props.to}
-    className={({ isActive }) =>
-      `${props.className} ${isActive ? props.activeClassName : ""}`
-    }
-    end
-  >
-    {props.children}
-  </NavLink>
-));
-
-
-
-
-
 const DeskLeftNav = () =>{
   const {isAuthenticated} =useContext(AuthContext);
   const [openPostDialogue, setOpenPostDialogue] = React.useState(false);

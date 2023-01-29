@@ -69,7 +69,7 @@ const PhotoCropper = ({ imgsrc, goBacktToSelectImage,getCroppedImage }: CropperP
   const [rotation, setRotation] = useState<any>(0);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [croppedImage, setCroppedImage] = useState<string | null>(null);
-  const [aspect, setAspect] = useState(5/3);
+  const [aspect, setAspect] = useState(5/7);
 
   const onCropComplete = useCallback(
     (croppedArea: any, croppedAreaPixels: any) => {

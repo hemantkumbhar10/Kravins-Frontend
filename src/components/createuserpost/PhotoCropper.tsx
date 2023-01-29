@@ -1,27 +1,38 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 
-import { Box, IconButton, Tooltip, Typography, styled, Slider } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Tooltip,
+  Typography,
+  styled,
+  Slider,
+  Stack,
+} from "@mui/material";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import AvatarEditor from "react-avatar-editor";
-import ReactCrop, {centerCrop, makeAspectCrop, Crop, PixelCrop} from 'react-image-crop';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 
 import classes from "./styles/PhotoCropper.module.css";
+import Cropper from "react-easy-crop";
+import getCroppedImg from "../../helpers/CropImage";
+import Button from "@mui/material/Button";
 
 interface CropperProps {
   imgsrc: string;
   goBacktToSelectImage: () => void;
+  getCroppedImage:(img:string|null)=>void
 }
-
 
 const ImageActionSlider = styled(Slider)({
   color: "#52af77",
-  height: 8,
+  height: 3,
   "& .MuiSlider-track": {
     border: "none",
   },
   "& .MuiSlider-thumb": {
-    height: 24,
-    width: 24,
+    height: 15,
+    width: 15,
     backgroundColor: "#fff",
     border: "2px solid currentColor",
     "&:focus, &:hover, &.Mui-active, &.Mui-focusVisible": {
@@ -32,7 +43,7 @@ const ImageActionSlider = styled(Slider)({
     },
   },
   "& .MuiSlider-valueLabel": {
-    lineHeight: 1.2,
+    lineHeight: 0.5,
     fontSize: 12,
     background: "unset",
     padding: 0,
@@ -52,38 +63,46 @@ const ImageActionSlider = styled(Slider)({
   },
 });
 
+const PhotoCropper = ({ imgsrc, goBacktToSelectImage,getCroppedImage }: CropperProps) => {
+  const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [zoom, setZoom] = useState<any>(0.5);
+  const [rotation, setRotation] = useState<any>(0);
+  const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  const [aspect, setAspect] = useState(5/3);
 
+  const onCropComplete = useCallback(
+    (croppedArea: any, croppedAreaPixels: any) => {
+      setCroppedAreaPixels(croppedAreaPixels);
+    },
+    []
+  );
 
-function centerAspectCrop(
-  mediaWidth: number,
-  mediaHeight: number,
-  aspect: number,
-) {
-  return centerCrop(
-    makeAspectCrop(
-      {
-        unit: '%',
-        width: 90,
-      },
-      aspect,
-      mediaWidth,
-      mediaHeight,
-    ),
-    mediaWidth,
-    mediaHeight,
-  )
-}
+  const imcreaseAspect = ()=>{
+    setAspect(5/7);
+  }
+  const decreaseAspect = ()=>{
+    setAspect(5/3);
+  }
 
+  const showCroppedImage = useCallback(async () => {
+    try {
+      const croppedImage: string | null = await getCroppedImg(
+        imgsrc,
+        croppedAreaPixels,
+        rotation
+      );
+      console.log("cropped Image", { croppedImage });
+      setCroppedImage(croppedImage);
+      getCroppedImage(croppedImage);
+    } catch (error) {
+      console.log("error occurred while getting cropped  image..", error);
+    }
+  }, [croppedAreaPixels, rotation, imgsrc]);
 
-
-
-const PhotoCropper = ({ imgsrc, goBacktToSelectImage }: CropperProps) => {
-  const [image, setImage] = useState<string>(imgsrc);
-  const imgRef = useRef<HTMLImageElement>(null)
-  const [crop, setCrop] = useState<Crop>();
-  const [scale, setScale] = useState<number>(1);
-  const [rotate, setRotate] = useState<number>(0);
-  const [aspect, setAspect] = useState<number | undefined>(16/9);
+  const onClose = useCallback(() => {
+    setCroppedImage(null);
+  }, []);
 
   const backToSelectorHandler = () => {
     goBacktToSelectImage();
@@ -95,50 +114,11 @@ const PhotoCropper = ({ imgsrc, goBacktToSelectImage }: CropperProps) => {
       aria-label="Back to image select"
       component="label"
       onClick={backToSelectorHandler}
-      sx={{ position: "absolute", top: 0, left: 0 }}
+      sx={{ position: "absolute", top: 0, left: 0, zIndex:1 }}
     >
       <KeyboardBackspaceIcon />
     </IconButton>
   );
-
-  const onSelectFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.currentTarget.files && event.currentTarget.files.length > 0) {
-      setCrop(undefined);
-      const reader = new FileReader();
-      reader.addEventListener('load', ()=> setImage(reader.result?.toString() || ''),)
-      reader.readAsDataURL(event.currentTarget.files[0]);
-      // setImage(URL.createObjectURL(event.currentTarget.files[0]));
-    }
-  };
-
-
-  const onImageLoad = (e:React.SyntheticEvent<HTMLImageElement>) => {
-    if(aspect){
-      const {width, height} = e.currentTarget;
-      setCrop(centerAspectCrop(width,height,aspect))
-    }
-  }
-
-
-  function handleToggleAspectClick(){
-    if(aspect){
-      setAspect(undefined);
-    }else if(imgRef.current){
-      const {width, height} = imgRef.current;
-      setAspect(16/9);
-      setCrop(centerAspectCrop(width, height, 16/9))
-    }
-  }
-
-
-
-  const handleZoomIn = (event: Event, newValue: number | number[]) => {
-    setScale(newValue as number);
-  };
-
-  const handleRotateRight = () => {
-    setRotate(rotate + 90);
-  };
 
   return (
     <>
@@ -147,41 +127,68 @@ const PhotoCropper = ({ imgsrc, goBacktToSelectImage }: CropperProps) => {
           width: "100%",
           height: "100%",
           display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          pt:10,
-          px:3
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems:"flex-start",
+          pt: 10,
+          px: 3,
         }}
       >
         {icon_button_for_goback}
-        {/* <Box sx={{ width: "auto", height: "auto" }}> */}
-          <AvatarEditor
-            // className={classes.photo_cropper_editor}
-            image={image}
-            color={[255, 255, 255, 0.6]}
-            width={450}
-            height={450}
-            scale={scale}
-            rotate={rotate}
-          ></AvatarEditor>
-          {/* <ReactCrop crop={}><img src={image}/></ReactCrop> */}
-                   
-        {/* </Box> */}
-        <Box sx={{ width:'150px',pt:2,pl:2 }}>
+        <Cropper
+        style={{containerStyle:{width:'90%', height:'70%', margin:'auto',marginTop:44}}}
+          image={imgsrc}
+          crop={crop}
+          rotation={rotation}
+          zoom={zoom}
+          aspect={aspect}
+          onCropChange={setCrop}
+          onRotationChange={setRotation}
+          onCropComplete={onCropComplete}
+          onZoomChange={setZoom}
+        />
+        <Box sx={{width:'100%', m: "auto", position:'relative', mb:4 }}>
+          <Stack direction='row' gap={3}> 
+          <Stack direction='column' width='100%'>
           <Typography gutterBottom pb={0} mb={-1}>
             Zoom
           </Typography>
           <ImageActionSlider
-
             valueLabelDisplay="auto"
             aria-label="pretto slider"
-            min={1}
+            min={0.5}
             step={0.05}
-            value={scale}
-            onChange={handleZoomIn}
+            value={zoom}
+            onChange={(e, zoom)=>setZoom(zoom)}
             max={10}
           />
+</Stack>
+<Stack direction='column' width='100%'>
+           <Typography gutterBottom pb={0} mb={-1}>
+            Rotate
+          </Typography>
+          <ImageActionSlider
+            valueLabelDisplay="auto"
+            aria-label="pretto slider"
+            min={0}
+            step={45}
+            value={rotation}
+            onChange={(e, rotation)=>setRotation(rotation)}
+            max={360}
+            />
+            </Stack></Stack>
+           <Stack direction='row' width='100%'>
+            <Stack direction='row'>
+              <IconButton color="primary" aria-label="Decrease crop size" component="label" onClick={decreaseAspect}>
+                <ArrowLeftIcon fontSize="large"/>
+              </IconButton>
+              <Typography variant="subtitle2" textAlign='center' color='green' my='auto' >Change Crop Size</Typography>
+              <IconButton color="primary" aria-label="Increase crop size" component="label" onClick={imcreaseAspect}>
+                <ArrowRightIcon fontSize="large"/>
+              </IconButton>
+            </Stack>
+            <Button variant="contained" sx={{height:30, m:'auto', mr:0}} color="blue" onClick={showCroppedImage}>Crop</Button>
+            </Stack>
         </Box>
       </Box>
     </>
@@ -189,3 +196,55 @@ const PhotoCropper = ({ imgsrc, goBacktToSelectImage }: CropperProps) => {
 };
 
 export default PhotoCropper;
+
+{
+  /** 
+<Box
+sx={{
+  width: "100%",
+  height: "100%",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "flex-start",
+  pt: 10,
+  px: 3,
+}}
+>
+{icon_button_for_goback}
+// <Box sx={{ width: "auto", height: "auto" }}> 
+//<AvatarEditor
+    // className={classes.photo_cropper_editor}
+  //  image={image}
+    //color={[255, 255, 255, 0.6]}
+   // width={450}
+   // height={450}
+   // scale={scale}
+   // rotate={rotate}
+ // ></AvatarEditor> 
+<ReactCrop
+  crop={crop}
+  onChange={(_, percentCrop) => setCrop(percentCrop)}
+  onComplete={(c) => setCompletedCrop(c)}
+  aspect={aspect}
+>
+  <img src={image} ref={imgRef} alt="Crop me" style={{transform:`scale(${scale}) rotate(${rotate}deg)`}} onLoad={onImageLoad}/>
+</ReactCrop>
+
+//</Box> 
+<Box sx={{ width: "150px", pt: 2, pl: 2 }}>
+  <Typography gutterBottom pb={0} mb={-1}>
+    Zoom
+  </Typography>
+  <ImageActionSlider
+    valueLabelDisplay="auto"
+    aria-label="pretto slider"
+    min={1}
+    step={0.05}
+    value={scale}
+    onChange={handleZoomIn}
+    max={10}
+  />
+</Box>
+</Box>*/
+}

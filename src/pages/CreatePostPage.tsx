@@ -214,7 +214,7 @@ const CreatePostPage = ({open,close}:DProps) => {
           <Button onClick={close}>
             Cancel
           </Button>
-          <Button variant="contained" color="success" onClick={close}>Post itt!</Button>
+          {/* <Button variant="contained" color="success" onClick={close}>Post itt!</Button> */}
         </DialogActions>
       </Dialog>
     </div>

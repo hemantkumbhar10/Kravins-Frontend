@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React,{useState, useContext} from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -6,22 +6,17 @@ import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
 import { viewportContext } from "../contexts/ViewportProvider";
 
-import { Avatar, Box, Divider, TextField } from "@mui/material";
+import { Avatar, Box, Divider, IconButton, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
-
-import { useMediaQuery } from "@mui/material";
-import { useTheme } from '@mui/material/styles';
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-
 import PhotoEditor from "../components/createuserpost/PhotoEditor";
 
-//assets
-import coffeeImage from "../assets/coffee.jpg";
-// import horizontalImage from "../assets/machiato.jpg";
+import { AuthContext } from "../contexts/AuthContext";
+
 
 const Img = styled("img")({
   objectFit: "contain",
@@ -48,11 +43,10 @@ const Transition = React.forwardRef(function Transition(
 });
 
 const CreatePostPage = ({open,close}:DProps) => {
-
+  const {authState} = useContext(AuthContext);
+  const [postImage, setPostImage] = useState<string|undefined>(undefined);
   const {width}  = useContext(viewportContext);
 
-  const theme = useTheme();
-  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
 
   if(!width){
@@ -61,12 +55,16 @@ const CreatePostPage = ({open,close}:DProps) => {
 
   const isDesktop = width < 900 ? true : false;
 
+  const getFinalImage = (img:string|undefined)=>{
+    setPostImage(img);
+  }
 
-   {/* coffeeImage */}
-                {/* horizontalImage */}
-                {/* <Box sx={{width:300, height:400, display:'flex', justifyContent:'center', alignItems:'center', backgroundColor:'#e7e3e3'}}>
-                    <AddIcon sx={{m:'auto'}} fontSize='large'/>
-                </Box> */}
+  const selectAnotherImage = ()=>{
+    setPostImage(undefined);
+  }
+
+
+   
 
   return (
     <div>
@@ -77,18 +75,13 @@ const CreatePostPage = ({open,close}:DProps) => {
           "& .MuiDialog-paper": {
             maxWidth:'unset',
           maxHeight:'unset'
-            // margin: { xs: "0" },
-            // maxHeight: { xs: "unset", md: "auto" },
-            // height: { xs: "100%", md: "auto" },
-            // width:{xs:'auto', }
           },
         }}
         open={open}
         TransitionComponent={Transition}
         aria-describedby="alert-dialog-slide-description"
       >
-        <PhotoEditor/>
-        {/* <>
+        { !postImage ? <PhotoEditor getFinalCroppedImage={getFinalImage}/> : <>
         <Box
           sx={{
             width: "100%",
@@ -119,9 +112,9 @@ const CreatePostPage = ({open,close}:DProps) => {
         >
           <Grid container spacing={2}>
             <Grid item m="auto">
-              <ButtonBase sx={{ maxWidth: 300, maxHeight: 400 }}>
+              <ButtonBase sx={{ maxWidth: 300, maxHeight: 400 }} onClick={selectAnotherImage}>
                
-                <Img alt="complex" src={coffeeImage} />
+                <Img alt="complex" src={postImage} />
               </ButtonBase>
             </Grid>
             <Grid item xs={12} sm sx={{ width: { md: 500 } }}>
@@ -132,7 +125,7 @@ const CreatePostPage = ({open,close}:DProps) => {
                   alignItems: "center",
                 }}
               >
-                <Avatar sizes="small">h</Avatar>
+                <Avatar sizes="small" src={authState.userInfo.profilepic ? authState.userInfo.profilepic : ''}></Avatar>
                 <Typography
                   ml={1}
                   gutterBottom
@@ -140,14 +133,14 @@ const CreatePostPage = ({open,close}:DProps) => {
                   fontWeight="bold"
                   component="div"
                 >
-                  hamncheese
+                  {authState.userInfo.fullname ? authState.userInfo.fullname : 'null'}
                 </Typography>
               </Box>
               <Divider sx={{ my: 1 }}></Divider>
 
               <TextField
                 id="standard-basic"
-                label="Title*"
+                label="Post title"
                 variant="standard"
                 sx={{ width: "100%", my: 1 }}
               />
@@ -209,12 +202,13 @@ const CreatePostPage = ({open,close}:DProps) => {
             </Grid>
           </Grid>
         </Paper>
-        </> */}
+        </>
+        }
         <DialogActions>
           <Button onClick={close}>
             Cancel
           </Button>
-          {/* <Button variant="contained" color="success" onClick={close}>Post itt!</Button> */}
+          {postImage && <Button variant="contained" color="success" onClick={close}>Post itt!</Button>}
         </DialogActions>
       </Dialog>
     </div>

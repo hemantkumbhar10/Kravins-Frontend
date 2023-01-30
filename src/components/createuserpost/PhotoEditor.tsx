@@ -5,10 +5,15 @@ import SelectPhoto from "./SelectPhoto";
 import PhotoCropper from "./PhotoCropper";
 
 
-const PhotoEditor = () => {
+interface EditorProps{
+  getFinalCroppedImage:(img:string|undefined)=>void;
+}
+
+
+const PhotoEditor = ({getFinalCroppedImage}:EditorProps) => {
   const [imgSrc, setImgSrc] = useState<string>("");
   const [isImageSelected, setIsImageSelected] = useState<boolean>(false);
-  const [croppedImage, setCroppedImage] = useState<string | null>(null);
+  const [croppedImage, setCroppedImage] = useState<string | undefined>(undefined);
   const containerRef = useRef(null);
 
   const getImage = (img: string) => {
@@ -22,7 +27,8 @@ const PhotoEditor = () => {
     setImgSrc("");
   };
 
-  const getCroppedImg = (img:string | null)=>{
+  const getCroppedImg = (img:string | undefined)=>{
+    getFinalCroppedImage(img);
     setCroppedImage(img);
     setIsImageSelected(false);
     setImgSrc("");

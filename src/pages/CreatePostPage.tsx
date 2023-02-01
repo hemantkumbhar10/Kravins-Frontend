@@ -16,6 +16,7 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import PhotoEditor from "../components/createuserpost/PhotoEditor";
 import useInput from "../hooks/use-intput";
 import { useUserPosts } from "../services/protected/useUserPosts.api";
+import { dataUrlToFile } from "../helpers/urlToFile";
 
 import { AuthContext } from "../contexts/AuthContext";
 
@@ -102,13 +103,32 @@ const CreatePostPage = ({open,close}:DProps) => {
       return;
     }
 
+  if(!postImage){
+    return;
+  }
+
+  const file = dataUrlToFile(postImage, titleValue);
+
+  console.log('herees the file: ',file);
+  const formdata = new FormData();
+  formdata.append('image',file);
+  formdata.append('title', titleValue);
+  if(recipe){
+    formdata.append('description', recipe);
+  }
+  if(brief){
+    formdata.append('brief', brief);
+  }
+
   const post_data = {
     title: titleValue,
     brief: brief,
-    description: recipe
+    description: recipe,
+    image:file,
   }
+
   try{
-    const data = await createUserPost(post_data);
+    const data = await createUserPost(formdata);
     console.log(data);
   }catch(e){
     console.log(e);

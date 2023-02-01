@@ -6,13 +6,13 @@ interface UserPostsData{
     title:string,
     brief?:string,
     recipe?:string,
-    image?:string,
+    image?:File | string,
 }
 
 
 
 interface UserPost{
-    createUserPost: (data:UserPostsData)=>Promise<UserPostsData>
+    createUserPost: (data:FormData)=>Promise<UserPostsData>
 }
 
 
@@ -21,9 +21,9 @@ const useUserPosts = ():UserPost =>{
 
     const {privateAxios} = useContext(FetchContext);
 
-    const createUserPost = async (data:UserPostsData):Promise<UserPostsData> =>{
+    const createUserPost = async (data:FormData):Promise<UserPostsData> =>{
 
-        const response : UserPostsData = await privateAxios.post('mypost', data);
+        const response : UserPostsData = await privateAxios.post('/mypost',data);
 
         return response;
     }

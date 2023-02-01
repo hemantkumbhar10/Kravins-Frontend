@@ -1,4 +1,4 @@
-import React,{useState, useContext} from "react";
+import React,{useState, useContext, FormEvent} from "react";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -14,6 +14,8 @@ import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import PhotoEditor from "../components/createuserpost/PhotoEditor";
+import useInput from "../hooks/use-intput";
+import { useUserPosts } from "../services/protected/useUserPosts.api";
 
 import { AuthContext } from "../contexts/AuthContext";
 
@@ -42,12 +44,28 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+
+const isWithinLimmit = (value: string) =>
+  value.trim().length > 45 ? false : true && value.trim() !== "";
+
+
 const CreatePostPage = ({open,close}:DProps) => {
   const {authState} = useContext(AuthContext);
   const [postImage, setPostImage] = useState<string|undefined>(undefined);
   const {width}  = useContext(viewportContext);
+  const [brief, setBrief] = useState<string | undefined>(undefined);
+  const [recipe, setRecipe] = useState<string | undefined>(undefined);
 
+  const {createUserPost} = useUserPosts();
 
+ const {
+  value: titleValue,
+  hasError: titleHasError,
+  isValid: titleIsValid,
+  valueChangeHandler : titleChangeHandler,
+  inputBlurHandler: titleBlurHandler,
+  reset:resetTitle
+ } = useInput(isWithinLimmit);
 
   if(!width){
     return<></>
@@ -64,6 +82,39 @@ const CreatePostPage = ({open,close}:DProps) => {
   }
 
 
+  const briefChangeHandler = (event:React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setBrief(event.currentTarget.value);
+  };
+
+  const recipeChangeHandler = (event:React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setRecipe(event.currentTarget.value);
+  };
+
+
+  let isFormValid = false;
+
+  if(titleIsValid){
+    isFormValid = true;
+  }
+
+  const postSubmissionHandler = async(e:FormEvent)=>{
+    if(!isFormValid){
+      return;
+    }
+
+  const post_data = {
+    title: titleValue,
+    brief: brief,
+    description: recipe
+  }
+  try{
+    const data = await createUserPost(post_data);
+    console.log(data);
+  }catch(e){
+    console.log(e);
+  }
+
+  }
    
 
   return (
@@ -143,6 +194,10 @@ const CreatePostPage = ({open,close}:DProps) => {
                 label="Post title"
                 variant="standard"
                 sx={{ width: "100%", my: 1 }}
+                onChange={titleChangeHandler}
+                onBlur={titleBlurHandler}
+                value={titleValue}
+                helperText={titleHasError && "Title is empty or too big!"}
               />
               <TextField
                 id="standard-basic"
@@ -150,6 +205,8 @@ const CreatePostPage = ({open,close}:DProps) => {
                 variant="standard"
                 multiline
                 rows={3}
+                onChange={briefChangeHandler}
+                value={brief}
                 fullWidth
                 sx={{
                   my: 1,
@@ -176,6 +233,8 @@ const CreatePostPage = ({open,close}:DProps) => {
                 label="Your Recipe goes here :)"
                 variant="standard"
                 multiline
+                onChange={recipeChangeHandler}
+                value={recipe}
                 rows={6}
                 fullWidth
                 sx={{
@@ -208,7 +267,7 @@ const CreatePostPage = ({open,close}:DProps) => {
           <Button onClick={close}>
             Cancel
           </Button>
-          {postImage && <Button variant="contained" color="success" onClick={close}>Post itt!</Button>}
+          {postImage && <Button variant="contained" color="success" onClick={postSubmissionHandler} disabled={!isFormValid}>Post itt!</Button>}
         </DialogActions>
       </Dialog>
     </div>

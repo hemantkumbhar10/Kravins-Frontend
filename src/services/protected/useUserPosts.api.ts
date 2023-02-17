@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import { FetchContext } from '../../contexts/PrivateFetchContext';
+import { AxiosHeaders } from 'axios';
 
 
 interface UserPostsData{
@@ -12,7 +13,7 @@ interface UserPostsData{
 
 
 interface UserPost{
-    createUserPost: (data:FormData)=>Promise<UserPostsData>
+    createUserPost: (data:any)=>Promise<UserPostsData>
 }
 
 
@@ -21,9 +22,13 @@ const useUserPosts = ():UserPost =>{
 
     const {privateAxios} = useContext(FetchContext);
 
-    const createUserPost = async (data:FormData):Promise<UserPostsData> =>{
+    const headers= {
+        'Content-Type':'multipart/form-data'
+    }
 
-        const response : UserPostsData = await privateAxios.post('/mypost',data);
+    const createUserPost = async (data:any):Promise<UserPostsData> =>{
+        privateAxios.defaults.headers['Content-Type'] = 'multipart/form-data';
+        const response : UserPostsData = await privateAxios.post('/mypost',data,);
 
         return response;
     }

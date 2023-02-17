@@ -124,14 +124,14 @@ const CreatePostPage = ({open,close}:DProps) => {
     title: titleValue,
     brief: brief,
     description: recipe,
-    image:file,
+    image:[file],
   }
 
   try{
     const data = await createUserPost(formdata);
     console.log(data);
   }catch(e){
-    console.log(e);
+    console.log('error occured sending data',e);
   }
 
   }

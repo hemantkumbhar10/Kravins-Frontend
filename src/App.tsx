@@ -27,7 +27,7 @@ import NoMatch from "./pages/NoMatch";
 import { AuthContext } from "./contexts/AuthContext";
 import { FetchProvider } from "./contexts/PrivateFetchContext";
 // import UserProfile from './pages/UserProfile';
-// import GroupPage from './pages/GroupPage';
+import GroupPage from './pages/GroupPage';
 // import CreateGroup from './Subpages/CreateGroup';
 
 const AppRoutes = () => {
@@ -49,7 +49,8 @@ const AppRoutes = () => {
           {/* <Route path="creategroup" element={<CreateGroup/>}/> */}
           <Route index element={<PostsPage />} />
           <Route path="" element={<PostsPage />} />
-          <Route path="kravins" element={<Kravin />}>
+          {/* <Route path="kravins" element={<Kravin />}> */}     //UNCOMMENT AFTER DONE WIHT GroupPage COMPONENT 
+          <Route path="kravins" element={<GroupPage />}>          // CREATE SEPARARTE ROUTE FOR GroupPage FROM UserPosts COMPONENT AFTER DONE WITH EDITING GROUPPAGE
             <Route index element={<RecipePage />} />
             <Route path="" element={<RecipePage />} />
             <Route path="cocktails" element={<CocktailsPage />} />

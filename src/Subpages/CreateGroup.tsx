@@ -1,4 +1,8 @@
-import React,{ useState, ChangeEvent } from "react";
+import React,{ useState, ChangeEvent, useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
+import useInput from "../hooks/use-intput";
+import { useUserPosts } from "../services/protected/useUserPosts.api";
+
 
 import {
   Box,
@@ -7,9 +11,10 @@ import {
   Tooltip,
   Grid,
   Typography,
-  Stack,
   TextField,
-  DialogActions
+  DialogActions,
+  Avatar,
+  Divider
 } from "@mui/material";
 import Slide from "@mui/material/Slide";
 import { TransitionProps } from "@mui/material/transitions";
@@ -20,12 +25,12 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
-import EditIcon from "@mui/icons-material/Edit";
 
 import img from "../assets/group_placeholder.jpg";
 
 import classes from "./styles/CreateGroup.module.css";
 import CroppedImage from "../components/CropImage";
+import { dataUrlToFile } from "../helpers/urlToFile";
 
 
 interface GProps{
@@ -44,28 +49,43 @@ const Transition = React.forwardRef(function Transition(
 });
 
 
+const isWithinLimmit = (value: string) =>
+  value.trim().length > 30 ? false : true && value.trim() !== "";
+
+const isDescrWithinLimmit = (value: string) =>
+  value.trim().length > 240 ? false : true && value.trim() !== "";
+
 
 const CreateGroup = ({open,close}:GProps) => {
   const [scroll, setScroll] = useState<DialogProps["scroll"]>("paper");
-
+  const {authState} = useContext(AuthContext);
   const [cropperHide, setCropperHide] = useState(true); //hides cropper div when clicked close button
   const [imageSrc, setImageSrc] = useState<string | null>(null); //File upload image
   const [croppedImage, setCroppedImage] = useState<string>(""); //get cropped image from props
 
-  const [editGroupNameButtonClicked, setEditGroupNameButtonClicked] =
-    useState(false);
-  const [
-    editGroupDescriptionButtonClicked,
-    setEditGroupDescriptionButtonClicked,
-  ] = useState(false);
 
-  const editButtonHandler = (buttonIdentifier: string) => {
-    if (buttonIdentifier === "group_description") {
-      setEditGroupDescriptionButtonClicked(true);
-    } else if (buttonIdentifier === "group_name") {
-      setEditGroupNameButtonClicked(true);
-    }
-  };
+  const {createUserGroup} = useUserPosts();
+
+  const {
+    value: groupNameValue,
+    hasError: groupNameHasError,
+    isValid: groupNameIsValid,
+    valueChangeHandler : groupNameChangeHandler,
+    inputBlurHandler:groupNameBlurHandler,
+    reset:resetGroupName
+   } = useInput(isWithinLimmit);
+
+
+  const {
+    value: groupDescriptionValue,
+    hasError: groupDescriptionHasError,
+    isValid: groupDescriptionIsValid,
+    valueChangeHandler : groupDescriptionChangeHandler,
+    inputBlurHandler:groupDescriptionBlurHandler,
+    reset:resetgroupDescription
+   } = useInput(isDescrWithinLimmit);
+
+
 
   const getCroppedImageToUpload = (img: string) => {
     setCroppedImage(img);
@@ -96,18 +116,41 @@ const CreateGroup = ({open,close}:GProps) => {
   };
 
 
+  let isFormValid = false;
+
+  if(groupNameIsValid && groupDescriptionIsValid){
+    isFormValid = true;
+  }
 
 
+  const createGroupHandler = async(e:React.FormEvent) =>{
 
-  //////////////////////Use use-input hook to implement the 'back to headers when user leaves input field or out of focus'///////////////////
+    if(!isFormValid){
+      return;
+    }
+
+    if(!croppedImage){
+      return;
+    }
 
 
+  const extension = imageSrc!.split("/")[1].split(";")[0];
 
+  const file = dataUrlToFile(imageSrc!, `${groupNameValue}.${extension}`);
 
+  const formdata = new FormData();
+  formdata.append('image',file);
+  formdata.append('groupname', groupNameValue);
+  formdata.append('groupbio', groupDescriptionValue);
 
+  try{
+    const data = await createUserGroup(formdata);
+    console.log('Group created successfully', data);
+  }catch(e){
+    console.log('error occured sending data',e);
+  };
 
-
-
+  }
 
 
 
@@ -183,69 +226,76 @@ const CreateGroup = ({open,close}:GProps) => {
                 xs={12}
                 sm={5}
               >
-                <Card sx={{ maxWidth: 300,boxShadow:'none', marginX:'auto'}}>
-                  {editGroupNameButtonClicked ? (
-                    <TextField
-                      sx={{ width: "100%", marginTop:1 }}
-                      id="outlined-name"
-                      label="Group Name"
-                      size="small"
-                      color="blue"
-                      // value={name}
-                      // onChange={handleChange}
-                    />
-                  ) : (
-                    <Stack direction="row" spacing={1}>
-                      <Typography variant="h6" color="primary" textAlign="left">
-                        Delicious Street Food
-                      </Typography>
-                      <Tooltip title="Edit name">
-                        <IconButton
-                          color="link"
-                          onClick={() => editButtonHandler("group_name")}
-                        >
-                          <EditIcon fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                    </Stack>
-                  )}
-                  {editGroupDescriptionButtonClicked ? (
-                    <TextField
-                      sx={{ width: "100%",marginTop:2 }}
-                      id="outlined-name"
-                      label="Group Description"
-                      size="small"
-                      color="blue"
-                      multiline
-                      rows={4}
-                      
-                      // value={name}
-                      // onChange={handleChange}
-                    />
-                  ) : (
-                    <Stack direction="row" spacing={1} marginTop={2}>
-                      <Typography variant="body2" textAlign="justify" color='green'>
-                        Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ad fugiat quaerat, voluptatum vel sint magnam. Excepturi iusto perspiciatis corrupti. Optio sequi facilis
-                      </Typography>
-                      <Tooltip title="Edit group 
-                      description">
-                        <IconButton
-                          color="link"
-                          onClick={() => editButtonHandler("group_description")}
-                        >
-                          <EditIcon fontSize="small" />
-                        </IconButton>
-                      </Tooltip>
-                    </Stack>
-                  )}
-                </Card>
+                 <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                <Avatar sizes="small" src={authState.userInfo.profilepic ? authState.userInfo.profilepic : ''}></Avatar>
+                <Typography
+                  ml={1}
+                  gutterBottom
+                  variant="inherit"
+                  fontWeight="bold"
+                  component="div"
+                >
+                  {authState.userInfo.fullname ? authState.userInfo.fullname : 'null'}
+                </Typography>
+              </Box>
+              <Divider sx={{ my: 1 }}></Divider>
+
+              <TextField
+                id="standard-basic"
+                label="Group Name"
+                variant="standard"
+                sx={{ width: "100%", my: 1 }}
+                onChange={groupNameChangeHandler}
+                onBlur={groupNameBlurHandler}
+                value={groupNameValue}
+                helperText={groupNameHasError && "Title is empty or too big!"}
+                FormHelperTextProps={{sx:{color:'red'}}}
+              />
+              <TextField
+                id="standard-basic"
+                label="Group Description"
+                variant="standard"
+                multiline
+                rows={4}
+                onChange={groupDescriptionChangeHandler}
+                onBlur={groupDescriptionBlurHandler}
+                value={groupDescriptionValue}
+                helperText={groupDescriptionHasError && "Title is empty or too big!"}
+                FormHelperTextProps={{sx:{color:'red'}}}
+                fullWidth
+                sx={{
+                  my: 1,
+                  backgroundColor: "#e7e3e3",
+                  borderRadius: 2,
+                  "& ..css-1iv5koc-MuiInputBase-root-MuiInput-root": {
+                    display: "none",
+                  },
+                  "& .css-66dh3a-MuiInputBase-input-MuiInput-input": { mx: 1 },
+                  "& .css-1unzfnd-MuiInputBase-root-MuiInput-root:before": {
+                    display: "none",
+                  },
+                  "& .css-13rgreq-MuiFormLabel-root-MuiInputLabel-root": {
+                    lineHeight: 1,
+                    left: 7,
+                    top: -5,
+                  },
+                  "& .css-1u7rucb-MuiFormLabel-root-MuiInputLabel-root.Mui-focused":
+                    { lineHeight: 1, left: 7, top: 5 },
+                }}
+              />
               </Grid>
             </Grid>
           </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={close}>Cancel</Button>
-          <Button onClick={close}>Create Group</Button>
+          <Button onClick={createGroupHandler}>Create Group</Button>
         </DialogActions>
       </Dialog>
     </div>

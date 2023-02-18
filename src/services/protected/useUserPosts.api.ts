@@ -10,10 +10,17 @@ interface UserPostsData{
     image?:File | string,
 }
 
+interface UserGroupData {
+    groupname:string,
+    groupbio:string,
+    image:File | string,
+}
+
 
 
 interface UserPost{
     createUserPost: (data:any)=>Promise<UserPostsData>
+    createUserGroup: (data:any)=>Promise<UserGroupData>
 }
 
 
@@ -33,8 +40,16 @@ const useUserPosts = ():UserPost =>{
         return response;
     }
 
+    const createUserGroup = async (data:any):Promise<UserGroupData> =>{
+        privateAxios.defaults.headers['Content-Type'] = 'multipart/form-data';
+        const response :UserGroupData = await privateAxios.post('/mygroup',data,);
+
+        return response;
+    }
+
     return {
-        createUserPost
+        createUserPost,
+        createUserGroup
     }
 }
 

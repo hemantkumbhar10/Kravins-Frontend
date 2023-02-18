@@ -124,12 +124,6 @@ const CreatePostPage = ({open,close}:DProps) => {
     formdata.append('brief', brief);
   }
 
-  const post_data = {
-    title: titleValue,
-    brief: brief,
-    description: recipe,
-    image:[file],
-  }
 
   try{
     const data = await createUserPost(formdata);

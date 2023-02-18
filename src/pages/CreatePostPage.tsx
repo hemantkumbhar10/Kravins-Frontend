@@ -107,9 +107,13 @@ const CreatePostPage = ({open,close}:DProps) => {
     return;
   }
 
-  const file = dataUrlToFile(postImage, titleValue);
+  const extension = postImage.split("/")[1].split(";")[0];
 
-  console.log('herees the file: ',file);
+  // console.log('heres file type------->', extension)
+
+  const file = dataUrlToFile(postImage, `${titleValue}.${extension}`);
+
+  // console.log('herees the file: ',file);
   const formdata = new FormData();
   formdata.append('image',file);
   formdata.append('title', titleValue);
@@ -129,7 +133,7 @@ const CreatePostPage = ({open,close}:DProps) => {
 
   try{
     const data = await createUserPost(formdata);
-    console.log(data);
+    console.log('Post uploaded successfully', data);
   }catch(e){
     console.log('error occured sending data',e);
   }

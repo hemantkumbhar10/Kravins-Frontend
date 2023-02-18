@@ -20,7 +20,9 @@ const FetchProvider = ({ children }: { children: ReactNode }) => {
   useEffect(()=>{
     const getCSRFToken = async()=>{
       const {data} = await privateAxios.get('/csrf-token');
+      console.log('frontendcsrftoekn',data.csrfToken);
       privateAxios.defaults.headers['X-CSRF-Token'] = data.csrfToken;
+      // document.cookie = `${data.csrfToken}; httpOnly=true; path=/`;
       // console.log(data)
     };
     getCSRFToken();

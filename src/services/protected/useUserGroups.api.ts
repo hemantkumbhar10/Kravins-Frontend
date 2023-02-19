@@ -5,6 +5,7 @@ import { AxiosResponse } from 'axios';
 
 interface UserPost{
     getMyGroups:()=>Promise<AxiosResponse>;
+    getGroupById:(id:any)=>Promise<AxiosResponse>;
 }
 
 
@@ -17,9 +18,15 @@ const useUserGroups = ():UserPost =>{
         return response;
     }
 
+    const getGroupById = async(id:any):Promise<AxiosResponse>=>{
+        const response: AxiosResponse = await privateAxios.get('/group', {params:{id:id}});
+        return response;
+    }
+
 
     return {
         getMyGroups,
+        getGroupById
     }
 }
 

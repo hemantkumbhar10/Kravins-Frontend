@@ -14,13 +14,14 @@ interface Props{
     img:string,
     isViewing?:boolean;
     isSearching?:boolean;
+    ID:string;
 }
 
 
 
 const GroupCard = (props:Props) => {
 
-    const {group_name, group_owner, img, isViewing, isSearching} = props;
+    const {group_name, group_owner, img, isViewing, isSearching, ID} = props;
 
 
   return <>
@@ -67,7 +68,7 @@ const GroupCard = (props:Props) => {
           justifyContent="flex-end"
           marginTop={3}
         >
-          <Button size="small" variant="outlined" component={NavLink} to={`mygroups/:id`} sx={{textTransform:'none'}}>
+          <Button size="small" variant="outlined" component={NavLink} to={`/home/mygroups/${ID}`} sx={{textTransform:'none'}}>
             {isViewing && <Typography color='primary'>View</Typography>}
             {isSearching && <GroupAddIcon color="primary"/>}
           </Button>

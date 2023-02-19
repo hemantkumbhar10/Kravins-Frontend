@@ -65,10 +65,13 @@ const AppRoutes = () => {
             <Route index element={<FriendList />} />
             <Route path="" element={<FriendList />} />
             <Route path="mygroups" element={<GroupList />} >
-              <Route path="mygroups/:id" element={<GroupPage/>}/>
+              
             </Route>
+            
             <Route path="myposts" element={<UsersPosts />} />
           </Route>
+        <Route path="mygroups/:groupId" element={<GroupPage/>}/>
+
           {width < desktop_breakpoint && (
             <Route
               path="notifications"

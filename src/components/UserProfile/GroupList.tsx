@@ -49,7 +49,7 @@ const GroupList = () => {
         </Box>}
         {groups && groups.map((group:Group)=>(
           <Grid item key={group._id}>
-          <GroupCard img={group.groupimage} group_name={group.groupname} group_owner={group.groupowner} isViewing={true}/>
+          <GroupCard img={group.groupimage} group_name={group.groupname} group_owner={group.groupowner} isViewing={true} ID={group._id}/>
           </Grid>
         ))}
       </Grid>

@@ -3,13 +3,21 @@ import { FetchContext } from '../../contexts/PrivateFetchContext';
 import { AxiosResponse } from 'axios';
 
 
-interface UserPost{
+interface UserGroup{
     getMyGroups:()=>Promise<AxiosResponse>;
     getGroupById:(id:any)=>Promise<AxiosResponse>;
+    createGroupPost:(data:any)=>Promise<UserPostsData>;
+}
+
+interface UserPostsData{
+    title:string,
+    brief?:string,
+    recipe?:string,
+    image?:File | string,
 }
 
 
-const useUserGroups = ():UserPost =>{
+const useUserGroups = ():UserGroup =>{
 
     const {privateAxios} = useContext(FetchContext);
 
@@ -23,10 +31,16 @@ const useUserGroups = ():UserPost =>{
         return response;
     }
 
+    const createGroupPost = async(data:any):Promise<UserPostsData>=>{
+        const response : UserPostsData  = await privateAxios.post('/mygroup',data);
+        return response
+    }
+
 
     return {
         getMyGroups,
-        getGroupById
+        getGroupById,
+        createGroupPost
     }
 }
 

@@ -1,5 +1,4 @@
-import { Card, Grid, CardActions, CardMedia, CardContent, Typography, Button, Tooltip, IconButton, Box } from "@mui/material";
-import PeopleIcon from '@mui/icons-material/People';
+import { CardMedia, Typography, Tooltip, IconButton, Box } from "@mui/material";
 import EmailIcon from '@mui/icons-material/Email';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import GroupsIcon from '@mui/icons-material/Groups';

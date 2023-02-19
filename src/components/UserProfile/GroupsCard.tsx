@@ -4,7 +4,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import GroupRemoveIcon from '@mui/icons-material/GroupRemove';
+import { NavLink } from "react-router-dom";
 
 
 
@@ -12,13 +12,15 @@ interface Props{
     group_name : string,
     group_owner : string,
     img:string,
+    isViewing?:boolean;
+    isSearching?:boolean;
 }
 
 
 
 const GroupCard = (props:Props) => {
 
-    const {group_name, group_owner, img} = props;
+    const {group_name, group_owner, img, isViewing, isSearching} = props;
 
 
   return <>
@@ -38,10 +40,13 @@ const GroupCard = (props:Props) => {
         }}
       >
         <Paper
+        component={'img'}
+        src={img}
           sx={{
             width: "100%",
             backgroundColor: "#4BC8F1",
-            height: 50,
+            backgroundImage:{img},
+            height: 40,
             position: "absolute",
             top: 0,
             display:'flex',
@@ -50,16 +55,6 @@ const GroupCard = (props:Props) => {
             boxShadow:'none'
           }}
         ></Paper>
-        <Avatar
-          src={img}
-          alt="user"
-          sx={{
-            marginTop:1
-            ,
-            height: { xs: 50, md: 60 },
-            width: { xs: 50, md: 60 },
-          }}
-        />
         <Typography textAlign="center" marginTop="10px" sx={{fontSize:{xs:'16px', md:'18px'}, color:'#515365'}}>
           {group_name}
         </Typography>
@@ -72,8 +67,9 @@ const GroupCard = (props:Props) => {
           justifyContent="flex-end"
           marginTop={3}
         >
-          <Button size="small" variant="outlined">
-            <GroupAddIcon color="primary"/>
+          <Button size="small" variant="outlined" component={NavLink} to={`mygroups/:id`} sx={{textTransform:'none'}}>
+            {isViewing && <Typography color='primary'>View</Typography>}
+            {isSearching && <GroupAddIcon color="primary"/>}
           </Button>
         </Stack>
       </Paper>

@@ -49,8 +49,8 @@ const AppRoutes = () => {
           {/* <Route path="creategroup" element={<CreateGroup/>}/> */}
           <Route index element={<PostsPage />} />
           <Route path="" element={<PostsPage />} />
-          {/* <Route path="kravins" element={<Kravin />}> */}     //UNCOMMENT AFTER DONE WIHT GroupPage COMPONENT 
-          <Route path="kravins" element={<GroupPage />}>          // CREATE SEPARARTE ROUTE FOR GroupPage FROM UserPosts COMPONENT AFTER DONE WITH EDITING GROUPPAGE
+          <Route path="kravins" element={<Kravin />}>
+          {/* <Route path="kravins" element={<GroupPage />}>          // CREATE SEPARARTE ROUTE FOR GroupPage FROM UserPosts COMPONENT AFTER DONE WITH EDITING GROUPPAGE */}
             <Route index element={<RecipePage />} />
             <Route path="" element={<RecipePage />} />
             <Route path="cocktails" element={<CocktailsPage />} />
@@ -64,7 +64,9 @@ const AppRoutes = () => {
           >
             <Route index element={<FriendList />} />
             <Route path="" element={<FriendList />} />
-            <Route path="mygroups" element={<GroupList />} />
+            <Route path="mygroups" element={<GroupList />} >
+              <Route path="mygroups/:id" element={<GroupPage/>}/>
+            </Route>
             <Route path="myposts" element={<UsersPosts />} />
           </Route>
           {width < desktop_breakpoint && (

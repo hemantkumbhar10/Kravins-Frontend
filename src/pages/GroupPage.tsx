@@ -9,13 +9,13 @@ import classes from './styles/GroupPage.module.css';
 const GroupPage = () => { 
   return (
     <Container
-    sx={{p:'unset !important',maxWidth:'100%',mt:5}}
+    sx={{width:'100%',mt:{xs:3}, px:{md:'0 !important', lg:'18.5px !important'}}}
       className={classes.grouppage_container}
     >
-      <Box className={classes.grouppage_grid} sx={{width:'100%'}} >
+      <Box className={classes.grouppage_grid} sx={{width:'100%',}} >
           <GroupTitleCard />
       </Box>
-      <Box m='auto' className={classes.grouppage_scroll_div} display='flex' justifyContent='center' height='100%' width='75%'>
+      <Box m='auto' className={classes.grouppage_scroll_div} display='flex' justifyContent='center' height='100%' width={{xs:'100%', md:'85%'}} p={-1}>
             <div>
             <RecipeCard/>
             <RecipeCard/>

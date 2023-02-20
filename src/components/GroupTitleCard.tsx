@@ -6,7 +6,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import GroupsIcon from '@mui/icons-material/Groups';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-import CreateGroupDialogue from './CreateGroupDialogue';
+import CreateGroupDialogue from './CreateGroupPostDialogue';
 
 import img from '../assets/group_image.jpg';
 

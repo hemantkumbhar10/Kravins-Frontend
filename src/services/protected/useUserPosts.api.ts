@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import { FetchContext } from '../../contexts/PrivateFetchContext';
 import { AxiosHeaders } from 'axios';
+import {publicFetch} from '../../utils/fetch';
 
 
 interface UserPostsData{
@@ -21,6 +22,7 @@ interface UserGroupData {
 interface UserPost{
     createUserPost: (data:any)=>Promise<UserPostsData>
     createUserGroup: (data:any)=>Promise<UserGroupData>
+    pagination:(page:number)=>Promise<[]>;
 }
 
 
@@ -47,9 +49,15 @@ const useUserPosts = ():UserPost =>{
         return response;
     }
 
+    const pagination = async (page:number):Promise<[]>=>{
+        const response:[] = await publicFetch.get('/pagination', {params:{page:page}});
+        return response
+    }
+
     return {
         createUserPost,
-        createUserGroup
+        createUserGroup,
+        pagination
     }
 }
 

@@ -13,11 +13,12 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import ButtonBase from "@mui/material/ButtonBase";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import PhotoEditor from "../components/createuserpost/PhotoEditor";
+import PhotoEditor from "./createuserpost/PhotoEditor";
 import useInput from "../hooks/use-intput";
 import { useUserPosts } from "../services/protected/useUserPosts.api";
-import { useUserGroups } from "../services/protected/useUserGroups.api";
+// import { useUserGroups } from "../services/protected/useUserGroups.api";
 import { dataUrlToFile } from "../helpers/urlToFile";
+import { useParams } from "react-router-dom";
 
 const Img = styled("img")({
   objectFit: "contain",
@@ -49,13 +50,16 @@ const isWithinLimmit = (value: string) =>
   value.trim().length > 45 ? false : true && value.trim() !== "";
 
 
-const CreateGroupDialogue = ({open,close, groupname, groupimage}:DProps) => {
+const CreateGroupPostDialogue = ({open,close, groupname, groupimage}:DProps) => {
   const [postImage, setPostImage] = useState<string|undefined>(undefined);
   const {width}  = useContext(viewportContext);
   const [brief, setBrief] = useState<string | undefined>(undefined);
   const [recipe, setRecipe] = useState<string | undefined>(undefined);
 
-  const {createGroupPost} = useUserGroups();
+  const {createUserPost} = useUserPosts();
+
+  const {groupId} = useParams();
+  // console.log('this is from group post dialogue box----------->', groupId);
 
  const {
   value: titleValue,
@@ -105,6 +109,10 @@ const CreateGroupDialogue = ({open,close, groupname, groupimage}:DProps) => {
     return;
   }
 
+  if(!groupId){
+    return
+  }
+
   const extension = postImage.split("/")[1].split(";")[0];
 
   // console.log('heres file type------->', extension)
@@ -115,6 +123,7 @@ const CreateGroupDialogue = ({open,close, groupname, groupimage}:DProps) => {
   const formdata = new FormData();
   formdata.append('image',file);
   formdata.append('title', titleValue);
+  formdata.append('groupid', groupId);
   if(recipe){
     formdata.append('description', recipe);
   }
@@ -124,7 +133,7 @@ const CreateGroupDialogue = ({open,close, groupname, groupimage}:DProps) => {
 
 
   try{
-    const data = await createGroupPost(formdata);
+    const data = await createUserPost(formdata);
     console.log('GroupPost uploaded successfully---------------------->', data);
   }catch(e){
     console.log('error occured sending data',e);
@@ -290,4 +299,4 @@ const CreateGroupDialogue = ({open,close, groupname, groupimage}:DProps) => {
   );
 };
 
-export default CreateGroupDialogue;
+export default CreateGroupPostDialogue;

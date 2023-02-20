@@ -6,7 +6,6 @@ import { AxiosResponse } from 'axios';
 interface UserGroup{
     getMyGroups:()=>Promise<AxiosResponse>;
     getGroupById:(id:any)=>Promise<AxiosResponse>;
-    createGroupPost:(data:any)=>Promise<UserPostsData>;
 }
 
 interface UserPostsData{
@@ -31,16 +30,10 @@ const useUserGroups = ():UserGroup =>{
         return response;
     }
 
-    const createGroupPost = async(data:any):Promise<UserPostsData>=>{
-        const response : UserPostsData  = await privateAxios.post('/mygroup',data);
-        return response
-    }
-
 
     return {
         getMyGroups,
         getGroupById,
-        createGroupPost
     }
 }
 

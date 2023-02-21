@@ -1,14 +1,31 @@
 import React, {useContext} from 'react';
 import { FetchContext } from '../../contexts/PrivateFetchContext';
-import { AxiosHeaders } from 'axios';
+import { AxiosHeaders, AxiosResponse } from 'axios';
 import {publicFetch} from '../../utils/fetch';
 
 
 interface UserPostsData{
+    postid:string;
     title:string,
     brief?:string,
     recipe?:string,
-    image?:File | string,
+    image?:string,
+}
+
+interface UserProfile{
+    fullname:string;
+    profilepic:string;
+}
+
+interface GroupOwner{
+    groupname:string;
+    groupimage:string;
+    groupowner:string;
+}
+
+interface UserPosts extends UserPostsData{
+    user_profile:UserProfile;
+    groupid:GroupOwner;
 }
 
 interface UserGroupData {
@@ -22,7 +39,7 @@ interface UserGroupData {
 interface UserPost{
     createUserPost: (data:any)=>Promise<UserPostsData>
     createUserGroup: (data:any)=>Promise<UserGroupData>
-    pagination:(page:number)=>Promise<[]>;
+    pagination:(page:number)=>Promise<AxiosResponse<UserPosts[]>>;
 }
 
 
@@ -49,8 +66,8 @@ const useUserPosts = ():UserPost =>{
         return response;
     }
 
-    const pagination = async (page:number):Promise<[]>=>{
-        const response:[] = await publicFetch.get('/pagination', {params:{page:page}});
+    const pagination = async (page:number):Promise<AxiosResponse<UserPosts[]>>=>{
+        const response:AxiosResponse<UserPosts[]> = await publicFetch.get('/pagination', {params:{page:page}});
         return response
     }
 

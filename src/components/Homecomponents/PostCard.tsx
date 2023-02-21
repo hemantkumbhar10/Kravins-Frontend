@@ -45,6 +45,10 @@ interface PostProps {
   groupname?: string;
   groupimage?: string;
   username: string;
+  title: string;
+  brief?: string;
+  recipe?: string;
+  image?: string;
 }
 
 const PostCard = (props: PostProps) => {
@@ -54,7 +58,7 @@ const PostCard = (props: PostProps) => {
 
   const open = Boolean(anchorEl);
 
-  const { groupname, groupimage, username } = props;
+  const { groupname, groupimage, username, title, recipe, brief, image } = props;
 
   const menuClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -74,14 +78,14 @@ const PostCard = (props: PostProps) => {
 
   return (
     <Card
-      sx={{maxWidth: 390, overflow: "auto !important", marginBottom: "1vh", boxShadow:'none',borderRadius:2, border:'1px solid #ede9e9',px:1}}
+      sx={{ maxWidth: 390, overflow: "auto !important", marginBottom: "1vh", boxShadow: 'none', borderRadius: 2, border: '1px solid #ede9e9', px: 1 }}
       className={classes.post_container}
     >
       <CardHeader
-      mx={2}
+        mx={2}
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
+          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" src={groupimage}>
+            K
           </Avatar>
         }
         action={
@@ -128,39 +132,38 @@ const PostCard = (props: PostProps) => {
           onClick={menuClose}
           disableRipple
           color="titleColor"
-          sx={{fontSize:'14px'}}
+          sx={{ fontSize: '14px' }}
         >
-          <EditIcon  color="titleColor"/>
+          <EditIcon color="titleColor" />
           Edit
         </MenuItem>
         <MenuItem
           onClick={menuClose}
           disableRipple
           color="titleColor"
-          sx={{fontSize:'14px'}}
+          sx={{ fontSize: '14px' }}
         >
           <DeleteIcon color="titleColor" />
           Delete
         </MenuItem>
       </StyledMenu>
 
-      <CardMedia
-        sx={{m:'auto'}}
+      {image && <CardMedia
+        sx={{ m: 'auto' }}
         component="img"
         height="auto"
-        image={omlette}
+        image={image}
         alt="Paella dish"
         className={classes.post_img}
-      />
+      />}
+
       <CardContent>
         <Typography variant="h6" color="primary" fontWeight='bold'>
-          Bread Omlette
+          {title}
         </Typography>
-        <Typography variant="body2" color='#959ab5'>
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
-        </Typography>
+        {brief && <Typography variant="body2" color='#959ab5'>
+          {brief}
+        </Typography>}
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites" onClick={likeHandler}>
@@ -172,9 +175,9 @@ const PostCard = (props: PostProps) => {
             }}
           />
         </IconButton>
-        <Typography  color={selected ? "primary" : "disabled"}>1,265</Typography>
+        <Typography color={selected ? "primary" : "disabled"}>1,265</Typography>
         <IconButton aria-label="comments">
-          <CommentIcon color={selected ? "primary" : "disabled"}/>
+          <CommentIcon color={selected ? "primary" : "disabled"} />
         </IconButton>
         <Typography color={selected ? "primary" : "disabled"}>27</Typography>
         <IconButton aria-label="share">
@@ -191,33 +194,7 @@ const PostCard = (props: PostProps) => {
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          <Typography paragraph color='#515365'>Method:</Typography>
-          <Typography paragraph color='#959ab5'>
-            Heat 1/2 cup of the broth in a pot until simmering, add saffron and
-            set aside for 10 minutes.
-          </Typography>
-          <Typography paragraph color='#959ab5'>
-            Heat oil in a (14- to 16-inch) paella pan or a large, deep skillet
-            over medium-high heat. Add chicken, shrimp and chorizo, and cook,
-            stirring occasionally until lightly browned, 6 to 8 minutes.
-            Transfer shrimp to a large plate and set aside, leaving chicken and
-            chorizo in the pan. Add pimentón, bay leaves, garlic, tomatoes,
-            onion, salt and pepper, and cook, stirring often until thickened and
-            fragrant, about 10 minutes. Add saffron broth and remaining 4 1/2
-            cups chicken broth; bring to a boil.
-          </Typography>
-          <Typography paragraph color='#959ab5'>
-            Add rice and stir very gently to distribute. Top with artichokes and
-            peppers, and cook without stirring, until most of the liquid is
-            absorbed, 15 to 18 minutes. Reduce heat to medium-low, add reserved
-            shrimp and mussels, tucking them down into the rice, and cook again
-            without stirring, until mussels have opened and rice is just tender,
-            5 to 7 minutes more. (Discard any mussels that don&apos;t open.)
-          </Typography>
-          <Typography color='#959ab5'>
-            Set aside off of the heat to let rest for 10 minutes, and then
-            serve.
-          </Typography>
+          {recipe && <Typography paragraph color='#515365'>{recipe}</Typography>}
         </CardContent>
       </Collapse>
     </Card>

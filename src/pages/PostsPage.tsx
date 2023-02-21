@@ -37,6 +37,8 @@ interface UserPosts extends UserPostsData {
 const PostsPage = () => {
 
   const [posts, setPosts] = useState<UserPosts[] | []>([]);
+
+  const index = 5;
   const [page, setPage] = useState(1);
   const divRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver>();
@@ -47,25 +49,28 @@ const PostsPage = () => {
     const fetchPosts = async () => {
       const response = await pagination(page);
       // setPosts(response.data);
+      console.log(response.data)
+      console.log(page)
       setPosts(prevPosts => [...prevPosts, ...response.data]);
     };
     fetchPosts();
   }, [page])
 
-
+  // console.log('pagedata', page);
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        if (entry.intersectionRatio > 0 && entry.target === divRef.current) {
-          // Progress div is visible to the user, fetch next data
-          setPage(previous => previous + 1);
+        if (entry.intersectionRatio < 0 && entry.target === divRef.current) {
+          setPage(page + 1);
         }
       });
     });
 
+
     if (divRef.current) {
       observerRef.current.observe(divRef.current);
+      
     }
 
     return () => {

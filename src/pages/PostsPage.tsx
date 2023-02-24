@@ -57,13 +57,23 @@ const PostsPage = () => {
       } else {
         setPosts(prevPosts => [...prevPosts, ...response.data]);
       }
+<<<<<<< HEAD
+=======
+      // setPosts(response.data);
+      console.log(response.data)
+      // console.log(page)
+>>>>>>> 463263e687f396a35f983adaa2e2af12272a2874
 
     };
     fetchPosts();
   }, [page])
 
   const moreButtonHandler = () => {
+<<<<<<< HEAD
     setPage(prevpage => prevpage + 1);
+=======
+    setPage(prevpage => page + 1);
+>>>>>>> 463263e687f396a35f983adaa2e2af12272a2874
   }
 
 

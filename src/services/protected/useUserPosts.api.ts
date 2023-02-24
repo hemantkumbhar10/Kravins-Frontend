@@ -5,7 +5,7 @@ import {publicFetch} from '../../utils/fetch';
 
 
 interface UserPostsData{
-    postid:string;
+    _id:string;
     title:string,
     brief?:string,
     recipe?:string,
@@ -40,6 +40,7 @@ interface UserGroupData {
 interface UserPost{
     createUserPost: (data:any)=>Promise<UserPostsData>
     createUserGroup: (data:any)=>Promise<UserGroupData>
+    updateUserPost:(data:any)=>Promise<UserPostsData>
     pagination:(page:number)=>Promise<AxiosResponse<UserPosts[]>>;
 }
 
@@ -67,6 +68,11 @@ const useUserPosts = ():UserPost =>{
         return response;
     }
 
+    const updateUserPost = async(data:any):Promise<UserPostsData> => {
+        const response : UserPostsData = await privateAxios.patch('/mypost', data);
+        return response;
+    }
+
     const pagination = async (page:number):Promise<AxiosResponse<UserPosts[]>>=>{
         const response:AxiosResponse<UserPosts[]> = await publicFetch.get('/pagination', {params:{page:page}});
         return response
@@ -75,6 +81,7 @@ const useUserPosts = ():UserPost =>{
     return {
         createUserPost,
         createUserGroup,
+        updateUserPost,
         pagination
     }
 }

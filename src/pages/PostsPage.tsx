@@ -10,7 +10,7 @@ import { useUserPosts } from '../services/protected/useUserPosts.api';
 
 
 interface UserPostsData {
-  postid: string;
+  _id: string;
   title: string,
   brief?: string,
   recipe?: string,
@@ -56,6 +56,7 @@ const PostsPage = () => {
       }
       if (page === 1) {
         setPosts(response.data);
+        console.log(response.data);
       } else {
         setPosts(prevPosts => [...prevPosts, ...response.data]);
       }
@@ -77,9 +78,9 @@ const PostsPage = () => {
         <Box className={classes.card_child} display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
           {posts?.map((post) => (
             post.groupid ? <>
-              <PostCard title={post.title} brief={post.brief ? post.brief : undefined} recipe={post.recipe ? post.recipe : undefined} image={post.image ? post.image : undefined} groupname={post.groupid.groupname} username={post.groupid.groupowner} groupimage={post.groupid.groupimage} key={post.postid} createdAt={post.createdAt}/>
+              <PostCard title={post.title} brief={post.brief ? post.brief : undefined} recipe={post.recipe ? post.recipe : undefined} image={post.image ? post.image : undefined} groupname={post.groupid.groupname} username={post.groupid.groupowner} groupimage={post.groupid.groupimage} key={post._id} createdAt={post.createdAt} _id={post._id}/>
             </> : <>
-              <PostCard title={post.title} brief={post.brief ? post.brief : undefined} recipe={post.recipe ? post.recipe : undefined} image={post.image ? post.image : undefined} username={post.user_profile.fullname} groupimage={post.user_profile.profilepic} key={post.postid} createdAt={post.createdAt}/>
+              <PostCard title={post.title} brief={post.brief ? post.brief : undefined} recipe={post.recipe ? post.recipe : undefined} image={post.image ? post.image : undefined} username={post.user_profile.fullname} groupimage={post.user_profile.profilepic} key={post._id} createdAt={post.createdAt} _id={post._id}/>
             </>
           ))}
         </Box>

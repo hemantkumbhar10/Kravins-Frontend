@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React, { useState, useContext } from "react";
 
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
@@ -23,6 +23,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { AuthContext } from "../../contexts/AuthContext";
 import omlette from "../../assets/omlette.jpg";
 
+import EditPost from '../createuserpost/EditPost';
+
 import classes from "./styles/PostCard.module.css";
 import { Box } from "@mui/material";
 
@@ -42,6 +44,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 interface PostProps {
+  _id:string;
   groupname?: string;
   groupimage?: string;
   username: string;
@@ -53,16 +56,18 @@ interface PostProps {
 }
 
 const PostCard = (props: PostProps) => {
-  const [expanded, setExpanded] = React.useState(false);
-  const [selected, setSelected] = React.useState(false);
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [expanded, setExpanded] = useState(false);
+  const [selected, setSelected] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  
-  const {authState} = useContext(AuthContext);
+  const [isUpdatePostDialogueOpen, setIsUpdatePostDialogueOpen] = useState(false);
+ 
+
+  const { authState } = useContext(AuthContext);
 
   const open = Boolean(anchorEl);
 
-  const { groupname, groupimage, username, title, recipe, brief, image, createdAt } = props;
+  const { groupname, groupimage, username, title, recipe, brief, image, createdAt, _id } = props;
 
 
 
@@ -78,6 +83,11 @@ const PostCard = (props: PostProps) => {
 
   // console.log(formattedDate); // Output: February 21, 2023 08:07pm
 
+
+  const editPostDialogueHandler = () => {
+    setIsUpdatePostDialogueOpen(prevState => !prevState);
+    setAnchorEl(null);
+  }
 
 
 
@@ -140,7 +150,8 @@ const PostCard = (props: PostProps) => {
       />
 
 
-      {(authState.userInfo.fullname === username || authState.userInfo.username === username) && <StyledMenu
+      {(authState.userInfo.fullname === username || authState.userInfo.username === username) 
+      && <StyledMenu
         id="demo-customized-menu"
         MenuListProps={{
           "aria-labelledby": "demo-customized-button",
@@ -150,7 +161,7 @@ const PostCard = (props: PostProps) => {
         onClose={menuClose}
       >
         <MenuItem
-          onClick={menuClose}
+          onClick={editPostDialogueHandler}
           disableRipple
           color="titleColor"
           sx={{ fontSize: '14px' }}
@@ -169,7 +180,7 @@ const PostCard = (props: PostProps) => {
         </MenuItem>
       </StyledMenu>}
 
-      
+
 
       {image && <CardMedia
         sx={{ m: 'auto' }}
@@ -220,6 +231,7 @@ const PostCard = (props: PostProps) => {
           {recipe && <Typography paragraph color='#515365'>{recipe}</Typography>}
         </CardContent>
       </Collapse>
+      <EditPost _id={_id} groupname={groupname} groupimage={groupimage} username={username} brief={brief} recipe={recipe} title={title} open={isUpdatePostDialogueOpen} close={editPostDialogueHandler} />
     </Card>
   );
 };

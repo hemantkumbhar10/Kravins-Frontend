@@ -49,6 +49,7 @@ interface PostProps {
   brief?: string;
   recipe?: string;
   image?: string;
+  createdAt:string;
 }
 
 const PostCard = (props: PostProps) => {
@@ -58,7 +59,24 @@ const PostCard = (props: PostProps) => {
 
   const open = Boolean(anchorEl);
 
-  const { groupname, groupimage, username, title, recipe, brief, image } = props;
+  const { groupname, groupimage, username, title, recipe, brief, image,createdAt } = props;
+
+
+const date = new Date(createdAt);
+const formattedDate = new Intl.DateTimeFormat('en-US', {
+  month: 'long',
+  day: '2-digit',
+  year: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  hour12: true
+}).format(date);
+
+// console.log(formattedDate); // Output: February 21, 2023 08:07pm
+
+
+
+
 
   const menuClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -108,11 +126,11 @@ const PostCard = (props: PostProps) => {
               <>
                 <Typography variant="subtitle2" color='#515365'>by {username}</Typography>
                 <Typography variant="subtitle2" lineHeight={1} color='#515365'>
-                  September 14, 2016
+                  {formattedDate}
                 </Typography>
               </>
             ) : (
-              'September 14, 2016'
+              formattedDate
             )}
           </>
         }

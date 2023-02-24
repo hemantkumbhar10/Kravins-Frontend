@@ -10,6 +10,7 @@ interface UserPostsData{
     brief?:string,
     recipe?:string,
     image?:string,
+    createdAt:string
 }
 
 interface UserProfile{

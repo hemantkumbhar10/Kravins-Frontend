@@ -82,7 +82,7 @@ const PostsPage = () => {
           ))}
         </Box>
         <Box sx={{ height: { xs: '15vh', md: '140px' }, width: '100%', display: 'flex', justifyContent: "center", alignItems: 'flex-start' }}>
-          {isDataFetched ? <Fab variant="extended" onClick={moreButtonHandler}>
+          {isDataFetched ? <Fab variant="extended" onClick={moreButtonHandler} color='primary'>
             <ExpandCircleDownIcon sx={{ mr: 1 }} />
             More
           </Fab> : <CircularProgress color='info' />}

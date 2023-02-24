@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import { CircularProgress, Fab } from "@mui/material";
@@ -44,6 +44,8 @@ const PostsPage = () => {
   const [page, setPage] = useState(1);
 
   const { pagination } = useUserPosts();
+
+ 
 
   useEffect(() => {
     const fetchPosts = async () => {

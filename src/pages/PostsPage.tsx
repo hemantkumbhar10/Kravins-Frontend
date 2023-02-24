@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Fab } from "@mui/material";
+import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
 
 import classes from "./styles/PostsPage.module.css";
 import PostCard from "../components/Homecomponents/PostCard";
@@ -14,6 +15,7 @@ interface UserPostsData {
   brief?: string,
   recipe?: string,
   image?: string,
+  createdAt:string
 }
 
 interface UserProfile {
@@ -37,48 +39,34 @@ interface UserPosts extends UserPostsData {
 const PostsPage = () => {
 
   const [posts, setPosts] = useState<UserPosts[] | []>([]);
+  const [isDataFetched, setIsDataFetched] = useState(true);
 
-  const index = 5;
   const [page, setPage] = useState(1);
-  const divRef = useRef<HTMLDivElement>(null);
-  const observerRef = useRef<IntersectionObserver>();
 
   const { pagination } = useUserPosts();
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setIsDataFetched(false);
       const response = await pagination(page);
-      // setPosts(response.data);
-      console.log(response.data)
-      console.log(page)
-      setPosts(prevPosts => [...prevPosts, ...response.data]);
+      if (response.data) {
+        setIsDataFetched(true);
+      }
+      if (page === 1) {
+        setPosts(response.data);
+      } else {
+        setPosts(prevPosts => [...prevPosts, ...response.data]);
+      }
+
     };
     fetchPosts();
   }, [page])
 
-  // console.log('pagedata', page);
-
-  useEffect(() => {
-    observerRef.current = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.intersectionRatio < 0 && entry.target === divRef.current) {
-          setPage(page + 1);
-        }
-      });
-    });
+  const moreButtonHandler = () => {
+    setPage(prevpage => prevpage + 1);
+  }
 
 
-    if (divRef.current) {
-      observerRef.current.observe(divRef.current);
-      
-    }
-
-    return () => {
-      if (observerRef.current && divRef.current) {
-        observerRef.current.unobserve(divRef.current);
-      }
-    };
-  }, []);
 
   return (
     <>
@@ -86,14 +74,17 @@ const PostsPage = () => {
         <Box className={classes.card_child} display='flex' flexDirection='column' justifyContent='center' alignItems='center'>
           {posts?.map((post) => (
             post.groupid ? <>
-              <PostCard title={post.title} brief={post.brief ? post.brief : undefined} recipe={post.recipe ? post.recipe : undefined} image={post.image ? post.image : undefined} groupname={post.groupid.groupname} username={post.groupid.groupowner} groupimage={post.groupid.groupimage} key={post.postid} />
+              <PostCard title={post.title} brief={post.brief ? post.brief : undefined} recipe={post.recipe ? post.recipe : undefined} image={post.image ? post.image : undefined} groupname={post.groupid.groupname} username={post.groupid.groupowner} groupimage={post.groupid.groupimage} key={post.postid} createdAt={post.createdAt}/>
             </> : <>
-              <PostCard title={post.title} brief={post.brief ? post.brief : undefined} recipe={post.recipe ? post.recipe : undefined} image={post.image ? post.image : undefined} username={post.user_profile.fullname} groupimage={post.user_profile.profilepic} key={post.postid} />
+              <PostCard title={post.title} brief={post.brief ? post.brief : undefined} recipe={post.recipe ? post.recipe : undefined} image={post.image ? post.image : undefined} username={post.user_profile.fullname} groupimage={post.user_profile.profilepic} key={post.postid} createdAt={post.createdAt}/>
             </>
           ))}
         </Box>
-        <Box ref={divRef} sx={{ height: { xs: '15vh', md: '70px' }, width: '100%', display: 'flex', justifyContent: "center", alignItems: 'flex-start' }}>
-          <CircularProgress color='info' />
+        <Box sx={{ height: { xs: '15vh', md: '140px' }, width: '100%', display: 'flex', justifyContent: "center", alignItems: 'flex-start' }}>
+          {isDataFetched ? <Fab variant="extended" onClick={moreButtonHandler}>
+            <ExpandCircleDownIcon sx={{ mr: 1 }} />
+            More
+          </Fab> : <CircularProgress color='info' />}
         </Box>
       </Container>
     </>

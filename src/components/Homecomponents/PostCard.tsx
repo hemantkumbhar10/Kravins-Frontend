@@ -1,4 +1,4 @@
-import * as React from "react";
+import React,{useContext} from "react";
 
 import { styled } from "@mui/material/styles";
 import Card from "@mui/material/Card";
@@ -20,7 +20,7 @@ import StyledMenu from "../../ui/StyledMenu";
 import MenuItem from "@mui/material/MenuItem";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import { AuthContext } from "../../contexts/AuthContext";
 import omlette from "../../assets/omlette.jpg";
 
 import classes from "./styles/PostCard.module.css";
@@ -49,7 +49,7 @@ interface PostProps {
   brief?: string;
   recipe?: string;
   image?: string;
-  createdAt:string;
+  createdAt: string;
 }
 
 const PostCard = (props: PostProps) => {
@@ -57,22 +57,26 @@ const PostCard = (props: PostProps) => {
   const [selected, setSelected] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
+  
+  const {authState} = useContext(AuthContext);
+
   const open = Boolean(anchorEl);
 
-  const { groupname, groupimage, username, title, recipe, brief, image,createdAt } = props;
+  const { groupname, groupimage, username, title, recipe, brief, image, createdAt } = props;
 
 
-const date = new Date(createdAt);
-const formattedDate = new Intl.DateTimeFormat('en-US', {
-  month: 'long',
-  day: '2-digit',
-  year: 'numeric',
-  hour: 'numeric',
-  minute: 'numeric',
-  hour12: true
-}).format(date);
 
-// console.log(formattedDate); // Output: February 21, 2023 08:07pm
+  const date = new Date(createdAt);
+  const formattedDate = new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    day: '2-digit',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true
+  }).format(date);
+
+  // console.log(formattedDate); // Output: February 21, 2023 08:07pm
 
 
 
@@ -106,7 +110,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
             K
           </Avatar>
         }
-        action={
+        action={(authState.userInfo.fullname === username || authState.userInfo.username === username) &&
           <IconButton
             aria-label="settings"
             aria-controls={open ? "demo-customized-menu" : undefined}
@@ -115,8 +119,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
             onClick={menuClick}
           >
             <MoreVertIcon />
-          </IconButton>
-        }
+          </IconButton>}
         title={
           <Typography variant="subtitle1" color='primary'> {groupname ? groupname : username} </Typography>
         }
@@ -137,7 +140,7 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
       />
 
 
-      <StyledMenu
+      {(authState.userInfo.fullname === username || authState.userInfo.username === username) && <StyledMenu
         id="demo-customized-menu"
         MenuListProps={{
           "aria-labelledby": "demo-customized-button",
@@ -164,7 +167,9 @@ const formattedDate = new Intl.DateTimeFormat('en-US', {
           <DeleteIcon color="titleColor" />
           Delete
         </MenuItem>
-      </StyledMenu>
+      </StyledMenu>}
+
+      
 
       {image && <CardMedia
         sx={{ m: 'auto' }}

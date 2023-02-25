@@ -12,8 +12,6 @@ import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import { useUserPosts } from "../../services/protected/useUserPosts.api";
-import { useNavigate } from "react-router-dom";
-import { redirect } from "react-router-dom";
 
 
 import { AuthContext } from "../../contexts/AuthContext";
@@ -47,7 +45,7 @@ const isWithinLimmit = (value: string) =>
     value.trim().length > 45 ? false : true && value.trim() !== "";
 
 
-const CreatePostPage = ({ open, close, groupname, username, brief, title, recipe,_id }: DProps) => {
+const EditPost = ({ open, close, groupname, username, brief, title, recipe,_id }: DProps) => {
 
     const { authState } = useContext(AuthContext);
     const { width } = useContext(viewportContext);
@@ -55,7 +53,6 @@ const CreatePostPage = ({ open, close, groupname, username, brief, title, recipe
     const [recipee, setRecipe] = useState<string | undefined>(recipe);
     const [titlee, setTitle] = useState(title);
     const [isTouched, setIsTouched] = useState(false);
-    const navigate = useNavigate();
 
     const { updateUserPost } = useUserPosts();
 
@@ -273,4 +270,4 @@ const CreatePostPage = ({ open, close, groupname, username, brief, title, recipe
     );
 }
 
-export default CreatePostPage
+export default EditPost;

@@ -41,6 +41,7 @@ interface UserPost{
     createUserPost: (data:any)=>Promise<UserPostsData>
     createUserGroup: (data:any)=>Promise<UserGroupData>
     updateUserPost:(data:any)=>Promise<UserPostsData>
+    deleteUserPost: (data:any)=>any
     pagination:(page:number)=>Promise<AxiosResponse<UserPosts[]>>;
 }
 
@@ -73,6 +74,11 @@ const useUserPosts = ():UserPost =>{
         return response;
     }
 
+    const deleteUserPost =async (data:any)=>{
+        const response: AxiosResponse = await privateAxios.delete('/mypost',  {params:{postid:data}});
+        return response;
+    }
+
     const pagination = async (page:number):Promise<AxiosResponse<UserPosts[]>>=>{
         const response:AxiosResponse<UserPosts[]> = await publicFetch.get('/pagination', {params:{page:page}});
         return response
@@ -82,6 +88,7 @@ const useUserPosts = ():UserPost =>{
         createUserPost,
         createUserGroup,
         updateUserPost,
+        deleteUserPost,
         pagination
     }
 }

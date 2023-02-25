@@ -27,6 +27,7 @@ import EditPost from '../createuserpost/EditPost';
 
 import classes from "./styles/PostCard.module.css";
 import { Box } from "@mui/material";
+import DeletePost from "../createuserpost/DeletePost";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -59,8 +60,8 @@ const PostCard = (props: PostProps) => {
   const [expanded, setExpanded] = useState(false);
   const [selected, setSelected] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   const [isUpdatePostDialogueOpen, setIsUpdatePostDialogueOpen] = useState(false);
+  const [isDeletePostDialogOpen, setIsDeletePostDialogOpen] = useState(false);
  
 
   const { authState } = useContext(AuthContext);
@@ -89,7 +90,10 @@ const PostCard = (props: PostProps) => {
     setAnchorEl(null);
   }
 
-
+  const deletePostDialogueHandler = () => {
+    setIsDeletePostDialogOpen(prevState => !prevState);
+    setAnchorEl(null);
+  }
 
 
   const menuClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -107,6 +111,10 @@ const PostCard = (props: PostProps) => {
   const likeHandler = () => {
     setSelected(!selected);
   };
+
+
+
+
 
   return (
     <Card
@@ -170,7 +178,7 @@ const PostCard = (props: PostProps) => {
           Edit
         </MenuItem>
         <MenuItem
-          onClick={menuClose}
+          onClick={deletePostDialogueHandler}
           disableRipple
           color="titleColor"
           sx={{ fontSize: '14px' }}
@@ -232,6 +240,7 @@ const PostCard = (props: PostProps) => {
         </CardContent>
       </Collapse>
       <EditPost _id={_id} groupname={groupname} groupimage={groupimage} username={username} brief={brief} recipe={recipe} title={title} open={isUpdatePostDialogueOpen} close={editPostDialogueHandler} />
+      <DeletePost _id={_id} open={isDeletePostDialogOpen} close={deletePostDialogueHandler}/>
     </Card>
   );
 };

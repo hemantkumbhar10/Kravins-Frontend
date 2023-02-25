@@ -178,7 +178,7 @@ const PostCard = (props: PostProps) => {
           Edit
         </MenuItem>
         <MenuItem
-          onClick={deletePostDialogueHandler}
+          onClick={menuClose}
           disableRipple
           color="titleColor"
           sx={{ fontSize: '14px' }}
@@ -191,11 +191,11 @@ const PostCard = (props: PostProps) => {
 
 
       {image && <CardMedia
-        sx={{ m: 'auto' }}
+        sx={{ m: 'auto', objectFit:'contain',width:{xs:370,lg:520}, backgroundColor:'#fffff9' }}
         component="img"
-        height="auto"
+        height="auto !important"
         image={image}
-        alt="Paella dish"
+        alt={title}
         className={classes.post_img}
       />}
 

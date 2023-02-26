@@ -28,6 +28,7 @@ import { AuthContext } from "./contexts/AuthContext";
 import { FetchProvider } from "./contexts/PrivateFetchContext";
 // import UserProfile from './pages/UserProfile';
 import GroupPage from './pages/GroupPage';
+import SearchFriendsGroups from "./components/SearchFriendsGroups";
 // import CreateGroup from './Subpages/CreateGroup';
 
 const AppRoutes = () => {
@@ -71,6 +72,7 @@ const AppRoutes = () => {
             <Route path="myposts" element={<UsersPosts />} />
           </Route>
         <Route path="mygroups/:groupId" element={<GroupPage/>}/>
+        <Route path="searchfriends&groups" element={<SearchFriendsGroups/>}/>
 
           {width < desktop_breakpoint && (
             <Route

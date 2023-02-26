@@ -178,7 +178,7 @@ const PostCard = (props: PostProps) => {
           Edit
         </MenuItem>
         <MenuItem
-          onClick={menuClose}
+          onClick={deletePostDialogueHandler}
           disableRipple
           color="titleColor"
           sx={{ fontSize: '14px' }}

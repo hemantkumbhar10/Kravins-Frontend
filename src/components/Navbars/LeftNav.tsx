@@ -13,6 +13,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import SignpostSharpIcon from "@mui/icons-material/SignpostSharp";
 import Diversity2SharpIcon from "@mui/icons-material/Diversity2Sharp";
+import { Link } from "react-router-dom";
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 
 import { NavLink } from "react-router-dom";
 import CreateGroup from "../../Subpages/CreateGroup";
@@ -46,6 +48,12 @@ const LeftNav = () => {
 
   const groupDialogueHandler=()=>{
     setOpenGroupDialogue(!openGroupDialogue);
+    if(mobileOpen){
+      setMobileOpen(false);
+    }
+  }
+
+  const searchHandler = ()=>{
     if(mobileOpen){
       setMobileOpen(false);
     }
@@ -121,6 +129,17 @@ const LeftNav = () => {
                     </ListItemIcon>
                     <ListItemText
                       primary="Create Group"
+                      sx={{ color: "#ff4b3a" }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem key="Search friends & groups" disablePadding>
+                  <ListItemButton component={Link} to='searchfriends&groups' onClick={searchHandler}>
+                    <ListItemIcon sx={{ color: "#ff4b3a" }}>
+                      <PersonSearchIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Search Friends & Groups"
                       sx={{ color: "#ff4b3a" }}
                     />
                   </ListItemButton>

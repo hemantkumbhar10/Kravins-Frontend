@@ -11,6 +11,7 @@ import Diversity2SharpIcon from "@mui/icons-material/Diversity2Sharp";
 import HomeIcon from "@mui/icons-material/Home";
 import RamenDiningIcon from "@mui/icons-material/RamenDining";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 
 import { AuthContext } from "../../contexts/AuthContext";
 
@@ -93,6 +94,14 @@ const DeskLeftNav = () =>{
             <Diversity2SharpIcon />
           </ListItemIcon>
           <ListItemText primary="Create Group" />
+        </ListItemButton>
+      </ListItem>
+      <ListItem key="Search friends & groups" disablePadding>
+        <ListItemButton component={NavLink} to="searchfriends&groups" >
+          <ListItemIcon>
+            <PersonSearchIcon />
+          </ListItemIcon>
+          <ListItemText primary="Search Friends & Groups" />
         </ListItemButton>
       </ListItem>
     </List>}

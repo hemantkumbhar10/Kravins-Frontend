@@ -1,0 +1,38 @@
+.searchbox_container{
+    margin-top: 65px;
+  }
+
+
+
+
+/* hide scrollbar for chrome */
+.search_page_container::-webkit-scrollbar {
+    display: none;
+  }
+
+.search_page_container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+
+@media screen and (min-width:620px) {
+    .search_page_container{
+        max-width: 100% !important;
+    }
+    
+}
+
+@media screen and (min-width:900px) {
+  .searchbox_container{
+    margin-top: 85px;
+  }
+
+    
+}
+
+@media screen and (min-width:960px) {
+    .search_page_container{
+        max-width: 100% !important;
+    }
+}

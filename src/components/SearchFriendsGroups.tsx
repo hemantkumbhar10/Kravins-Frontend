@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, FormEvent } from 'react';
 import { Button, Container, Box } from "@mui/material";
 import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
@@ -12,9 +12,20 @@ import CircularProgress from '@mui/material/CircularProgress';
 import GroupSearchCard from './GroupSearchCard';
 
 
+import { useSearchFriends } from '../services/protected/useSearchFriends.api';
+
 
 
 const SearchFriendsGroups = () => {
+
+    const {searchFriendsAndGroups} = useSearchFriends();
+    const [searchQuery, setSearchQuery] = useState<string>('');
+
+    const searchClickHandler = (event:FormEvent<HTMLTextAreaElement | HTMLInputElement>) =>{
+        event.preventDefault();
+        setSearchQuery(event.currentTarget.value);
+    }
+
     return (<Box sx={{width:'100%', height:'100vh'}}>
         <Paper
             component="form"
